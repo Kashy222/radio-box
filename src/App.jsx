@@ -115,15 +115,15 @@ function App() {
       const saved = localStorage.getItem('radioPresets');
       if (saved) {
         const parsed = JSON.parse(saved);
-        // Ensure it's exactly 9 slots
-        const filled = Array(9).fill(null);
-        parsed.forEach((s, i) => { if (i < 9) filled[i] = s; });
+        // Ensure it's exactly 6 slots
+        const filled = Array(6).fill(null);
+        parsed.forEach((s, i) => { if (i < 6) filled[i] = s; });
         return filled;
       }
     } catch (e) {
       console.error('Failed to load presets', e);
     }
-    return Array(9).fill(null);
+    return Array(6).fill(null);
   });
 
   useEffect(() => {
@@ -138,6 +138,8 @@ function App() {
   const audioRef = useRef(null);
   const dragItem = useRef(null);
   const dragOverItem = useRef(null);
+
+  const [deleteConfirmIndex, setDeleteConfirmIndex] = useState(null);
 
   const handleSort = () => {
     if (dragItem.current !== null && dragOverItem.current !== null && dragItem.current !== dragOverItem.current) {
@@ -632,18 +634,27 @@ function App() {
         newStations[firstEmptyIndex] = { freq: frequency, name: stationName };
         setSavedStations(newStations);
       } else {
-        alert("All 9 preset slots are full! Please delete one first.");
+        alert("All 6 preset slots are full! Please delete one first.");
       }
     }
   };
 
   const handleDeleteSaved = (indexToDelete, e) => {
     e.stopPropagation();
-    if (window.confirm("Are you sure you want to delete this saved station?")) {
+    setDeleteConfirmIndex(indexToDelete);
+  };
+
+  const confirmDelete = () => {
+    if (deleteConfirmIndex !== null) {
       const newStations = [...savedStations];
-      newStations[indexToDelete] = null;
+      newStations[deleteConfirmIndex] = null;
       setSavedStations(newStations);
+      setDeleteConfirmIndex(null);
     }
+  };
+
+  const cancelDelete = () => {
+    setDeleteConfirmIndex(null);
   };
 
   const handleSelectSaved = (freq) => {
@@ -710,7 +721,7 @@ function App() {
             <div className="screen-reflection"></div>
             
             <div className="screen-inner-layout">
-              <div className="lcd-city-badge">{currentCity}</div>
+              <div className="lcd-city-badge"><span>{currentCity}</span></div>
               {volume === 0 && (
                 <div className="lcd-mute-badge">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
@@ -783,7 +794,7 @@ function App() {
             <div className={`saved-stations-overlay-screen ${isMenuOpen ? 'open' : 'closed'}`}>
               <div className="overlay-header">
                 <button className="overlay-back-btn" onClick={() => setIsMenuOpen(false)}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="19" y1="12" x2="5" y2="12"></line>
                     <polyline points="12 19 5 12 12 5"></polyline>
                   </svg>
@@ -807,11 +818,17 @@ function App() {
                     onDragOver={(e) => e.preventDefault()}
                     onClick={() => station && handleSelectSaved(station.freq)}
                   >
-                    <span className="saved-item-preset-id">P-0{index + 1}</span>
+                    <div className="saved-item-top">
+                      <span className="saved-item-preset-id">P-0{index + 1}</span>
+                    </div>
                     {station && (
                       <>
-                        <span className="saved-item-freq">{station.freq.toFixed(2)} MHz</span>
-                        <span className="saved-item-name">{station.name}</span>
+                        <div className="saved-item-mid">
+                          <span className="saved-item-freq">{station.freq.toFixed(2)}</span>
+                        </div>
+                        <div className="saved-item-bottom">
+                          <span className="saved-item-name">{station.name}</span>
+                        </div>
                         <button 
                           className="saved-item-delete-btn" 
                           onClick={(e) => handleDeleteSaved(index, e)}
@@ -827,6 +844,19 @@ function App() {
                   </div>
                 ))}
               </div>
+
+              {/* Custom Delete Confirmation Popup */}
+              {deleteConfirmIndex !== null && (
+                <div className="delete-confirm-overlay">
+                  <div className="delete-confirm-popup">
+                    <p>Delete preset P-0{deleteConfirmIndex + 1}?</p>
+                    <div className="delete-confirm-actions">
+                      <button className="delete-confirm-cancel" onClick={cancelDelete}>Cancel</button>
+                      <button className="delete-confirm-ok" onClick={confirmDelete}>OK</button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
