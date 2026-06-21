@@ -518,6 +518,12 @@
   transition: background-color 0.15s ease;
 }
 
+.saved-station-item-row.empty {
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.01);
+  cursor: pointer;
+}
+
 .saved-station-item-row:active {
   cursor: grabbing;
 }
@@ -559,6 +565,13 @@
   color: #9ca3af;
   font-size: 0.7rem;
   font-weight: 500;
+}
+
+.saved-item-empty-text {
+  color: #6b7280;
+  font-size: 0.75rem;
+  font-style: italic;
+  font-weight: 400;
 }
 
 .saved-item-delete-btn {

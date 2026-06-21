@@ -113,11 +113,17 @@ function App() {
   const [savedStations, setSavedStations] = useState(() => {
     try {
       const saved = localStorage.getItem('radioPresets');
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Ensure it's exactly 9 slots
+        const filled = Array(9).fill(null);
+        parsed.forEach((s, i) => { if (i < 9) filled[i] = s; });
+        return filled;
+      }
     } catch (e) {
       console.error('Failed to load presets', e);
     }
-    return [];
+    return Array(9).fill(null);
   });
 
   useEffect(() => {
@@ -136,8 +142,10 @@ function App() {
   const handleSort = () => {
     if (dragItem.current !== null && dragOverItem.current !== null && dragItem.current !== dragOverItem.current) {
       let _savedStations = [...savedStations];
-      const draggedItemContent = _savedStations.splice(dragItem.current, 1)[0];
-      _savedStations.splice(dragOverItem.current, 0, draggedItemContent);
+      // Swap the contents of the two fixed slots
+      const temp = _savedStations[dragItem.current];
+      _savedStations[dragItem.current] = _savedStations[dragOverItem.current];
+      _savedStations[dragOverItem.current] = temp;
       setSavedStations(_savedStations);
     }
     dragItem.current = null;
@@ -613,18 +621,27 @@ function App() {
   // Station saving actions
   const handleAddStation = () => {
     if (!isPowerOn) return;
-    const isAlreadySaved = savedStations.some(s => Math.abs(s.freq - frequency) < 0.05);
+    const isAlreadySaved = savedStations.some(s => s && Math.abs(s.freq - frequency) < 0.05);
     if (!isAlreadySaved) {
-      const stationName = currentStation && Math.abs(currentStation.freq - frequency) < 0.15
-        ? currentStation.name
-        : `Preset ${frequency.toFixed(2)}`;
-      setSavedStations([...savedStations, { freq: frequency, name: stationName }]);
+      const firstEmptyIndex = savedStations.findIndex(s => s === null);
+      if (firstEmptyIndex !== -1) {
+        const stationName = currentStation && Math.abs(currentStation.freq - frequency) < 0.15
+          ? currentStation.name
+          : `Preset ${frequency.toFixed(2)}`;
+        const newStations = [...savedStations];
+        newStations[firstEmptyIndex] = { freq: frequency, name: stationName };
+        setSavedStations(newStations);
+      } else {
+        alert("All 9 preset slots are full! Please delete one first.");
+      }
     }
   };
 
-  const handleDeleteSaved = (freqToDelete, e) => {
+  const handleDeleteSaved = (indexToDelete, e) => {
     e.stopPropagation();
-    setSavedStations(savedStations.filter(s => s.freq !== freqToDelete));
+    const newStations = [...savedStations];
+    newStations[indexToDelete] = null;
+    setSavedStations(newStations);
   };
 
   const handleSelectSaved = (freq) => {
@@ -767,45 +784,47 @@ function App() {
                 <button className="overlay-close-btn" onClick={() => setIsMenuOpen(false)}>×</button>
               </div>
               <div className="overlay-list-scroll">
-                {savedStations.length === 0 ? (
-                  <div className="empty-saved-msg">No saved stations. Click + to add one.</div>
-                ) : (
-                  savedStations.map((station, index) => (
-                    <div 
-                      key={index} 
-                      className={`saved-station-item-row ${Math.abs(station.freq - frequency) < 0.05 ? 'active' : ''}`}
-                      draggable
-                      onDragStart={(e) => {
-                        dragItem.current = index;
-                        e.dataTransfer.effectAllowed = 'move';
-                      }}
-                      onDragEnter={(e) => {
-                        dragOverItem.current = index;
-                      }}
-                      onDragEnd={handleSort}
-                      onDragOver={(e) => e.preventDefault()}
-                      onClick={() => handleSelectSaved(station.freq)}
-                    >
-                      <div className="saved-item-info">
-                        <span className="saved-item-preset-id">P-{String(index + 1).padStart(2, '0')}</span>
-                        <span className="saved-item-freq">{station.freq.toFixed(2)} MHz</span>
-                        <span className="saved-item-name">{station.name}</span>
-                      </div>
+                {savedStations.map((station, index) => (
+                  <div 
+                    key={index} 
+                    className={`saved-station-item-row ${station && Math.abs(station.freq - frequency) < 0.05 ? 'active' : ''} ${!station ? 'empty' : ''}`}
+                    draggable
+                    onDragStart={(e) => {
+                      dragItem.current = index;
+                      e.dataTransfer.effectAllowed = 'move';
+                    }}
+                    onDragEnter={(e) => {
+                      dragOverItem.current = index;
+                    }}
+                    onDragEnd={handleSort}
+                    onDragOver={(e) => e.preventDefault()}
+                    onClick={() => station && handleSelectSaved(station.freq)}
+                  >
+                    <div className="saved-item-info">
+                      <span className="saved-item-preset-id">P-0{index + 1}</span>
+                      {station ? (
+                        <>
+                          <span className="saved-item-freq">{station.freq.toFixed(2)} MHz</span>
+                          <span className="saved-item-name">{station.name}</span>
+                        </>
+                      ) : (
+                        <span className="saved-item-empty-text">Empty Slot</span>
+                      )}
+                    </div>
+                    {station && (
                       <button 
                         className="saved-item-delete-btn" 
-                        onClick={(e) => handleDeleteSaved(station.freq, e)}
+                        onClick={(e) => handleDeleteSaved(index, e)}
                         aria-label="Delete saved station"
                       >
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="3 6 5 6 21 6"></polyline>
-                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                          <line x1="10" y1="11" x2="10" y2="17"></line>
-                          <line x1="14" y1="11" x2="14" y2="17"></line>
+                          <line x1="18" y1="6" x2="6" y2="18"></line>
+                          <line x1="6" y1="6" x2="18" y2="18"></line>
                         </svg>
                       </button>
-                    </div>
-                  ))
-                )}
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
