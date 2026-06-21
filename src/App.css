@@ -338,8 +338,7 @@
     transform: translateX(0);
   }
   45%, 55% {
-    /* 82px total max-width minus 12px padding/border = exactly 70px inner width */
-    transform: translateX(min(0px, calc(70px - 100%)));
+    transform: translateX(var(--scroll-amount, 0px));
   }
   85%, 100% {
     transform: translateX(0);

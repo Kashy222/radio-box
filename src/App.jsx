@@ -215,6 +215,8 @@ function App() {
   const accumulatedKnobAngle = useRef(0);
   const lastVolumeAngle = useRef(null);
   const accumulatedVolumeAngle = useRef(0);
+  const badgeContainerRef = useRef(null);
+  const badgeTextRef = useRef(null);
 
   // Initialize Audio Element with CORS support
   if (!audioRef.current) {
@@ -647,6 +649,24 @@ function App() {
     }
   }, [currentStation, frequency, isPowerOn]);
 
+  // Dynamically calculate exact scroll amount for the city badge to fix mobile CSS calc() bugs
+  useEffect(() => {
+    if (badgeContainerRef.current && badgeTextRef.current) {
+      // Use requestAnimationFrame to ensure fonts have rendered
+      requestAnimationFrame(() => {
+        if (!badgeContainerRef.current || !badgeTextRef.current) return;
+        const containerWidth = badgeContainerRef.current.clientWidth;
+        const textWidth = badgeTextRef.current.offsetWidth;
+        if (textWidth > containerWidth) {
+          const scrollAmt = containerWidth - textWidth;
+          badgeTextRef.current.style.setProperty('--scroll-amount', `${scrollAmt}px`);
+        } else {
+          badgeTextRef.current.style.setProperty('--scroll-amount', `0px`);
+        }
+      });
+    }
+  }, [currentCity]);
+
   // Compute position of the slider handle pointer
   const sliderPercent = ((frequency - MIN_FREQ) / (MAX_FREQ - MIN_FREQ)) * 100;
 
@@ -751,7 +771,7 @@ function App() {
             <div className="screen-reflection"></div>
             
             <div className="screen-inner-layout">
-              <div className="lcd-city-badge"><span>{currentCity}</span></div>
+              <div className="lcd-city-badge" ref={badgeContainerRef}><span ref={badgeTextRef}>{currentCity}</span></div>
               {volume === 0 && (
                 <div className="lcd-mute-badge">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
