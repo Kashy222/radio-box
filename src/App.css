@@ -257,6 +257,46 @@
   white-space: nowrap;
 }
 
+/* Calibrating State Animation */
+.calibrating-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.sliding-squares-loader {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.sliding-squares-loader .square {
+  width: 6px;
+  height: 6px;
+  background-color: #1c1510;
+  animation: slideSquares 1.2s infinite ease-in-out;
+}
+
+.sliding-squares-loader .square:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.sliding-squares-loader .square:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.sliding-squares-loader .square:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes slideSquares {
+  0% { opacity: 0; transform: translateX(-4px); }
+  30% { opacity: 0.8; transform: translateX(0); }
+  70% { opacity: 0.8; transform: translateX(0); }
+  100% { opacity: 0; transform: translateX(4px); }
+}
+
 /* City Badge on LCD Screen */
 .lcd-city-badge {
   font-family: 'Doto', monospace;

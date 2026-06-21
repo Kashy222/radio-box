@@ -48,6 +48,7 @@ function App() {
   const [frequency, setFrequency] = useState(93.5); // Start at 93.5 FM
   const [volume, setVolume] = useState(0.8);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isBuffering, setIsBuffering] = useState(false); // Track if audio is currently buffering
   const [isMono, setIsMono] = useState(false);
   const [isPowerOn, setIsPowerOn] = useState(false); // Power state defaults to off
  
@@ -118,6 +119,10 @@ function App() {
   if (!audioRef.current) {
     const audio = new Audio();
     audio.crossOrigin = "anonymous";
+    audio.addEventListener('loadstart', () => setIsBuffering(true));
+    audio.addEventListener('waiting', () => setIsBuffering(true));
+    audio.addEventListener('playing', () => setIsBuffering(false));
+    audio.addEventListener('canplay', () => setIsBuffering(false));
     audioRef.current = audio;
   }
 
@@ -256,6 +261,7 @@ function App() {
       
       const audio = audioRef.current;
       if (currentStation && currentStation.url_resolved) {
+        setIsBuffering(true);
         audio.src = currentStation.url_resolved;
         if (stationVolume > 0) {
           audio.play().catch(e => console.log("Stream play failed:", e));
@@ -335,6 +341,7 @@ function App() {
     const audio = audioRef.current;
     if (newPlayingState) {
       if (currentStation && currentStation.url_resolved) {
+        setIsBuffering(true);
         audio.src = currentStation.url_resolved;
         if (stationVolume > 0) {
           audio.play().catch(e => console.log("Stream play failed:", e));
@@ -362,6 +369,7 @@ function App() {
   useEffect(() => {
     const audio = audioRef.current;
     if (isPlaying && currentStation && currentStation.url_resolved && isPowerOn) {
+      setIsBuffering(true);
       audio.src = currentStation.url_resolved;
       if (stationVolume > 0) {
         audio.play().catch(e => console.log("Stream play transition failed:", e));
@@ -572,7 +580,20 @@ function App() {
 
                 {/* Station Title */}
                 <div className="lcd-station-title-box">
-                  <div className="lcd-station-title">{activeDisplayName}</div>
+                  <div className="lcd-station-title">
+                    {activeDisplayName !== "------" && isBuffering && isPlaying ? (
+                      <div className="calibrating-container">
+                        <span>CALIBRATING</span>
+                        <div className="sliding-squares-loader">
+                          <div className="square"></div>
+                          <div className="square"></div>
+                          <div className="square"></div>
+                        </div>
+                      </div>
+                    ) : (
+                      activeDisplayName
+                    )}
+                  </div>
                   {savedIndex !== -1 && (
                     <div className="lcd-preset-badge">
                       P-{String(savedIndex + 1).padStart(2, '0')}
