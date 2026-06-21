@@ -319,13 +319,13 @@
   border-radius: 3px;
   text-transform: uppercase;
   max-width: 82px;
+  width: max-content;
   white-space: nowrap;
   overflow: hidden;
   display: block;
   line-height: 12px;
   height: 16px;
   box-sizing: border-box;
-  container-type: inline-size;
 }
 
 .lcd-city-badge span {
@@ -338,8 +338,8 @@
     transform: translateX(0);
   }
   45%, 55% {
-    /* Use exact container width (100cqw) minus exact text width (100%) to align perfectly right */
-    transform: translateX(min(0px, calc(100cqw - 100%)));
+    /* 82px total max-width minus 12px padding/border = exactly 70px inner width */
+    transform: translateX(min(0px, calc(70px - 100%)));
   }
   85%, 100% {
     transform: translateX(0);
