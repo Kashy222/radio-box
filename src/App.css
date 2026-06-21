@@ -312,20 +312,17 @@
   padding: 2px 4px 2px 6px; /* Offset the built-in font tracking on the right */
   border-radius: 3px;
   text-transform: uppercase;
-  width: 82px;
+  max-width: 82px;
   white-space: nowrap;
   overflow: hidden;
   display: block;
   line-height: 12px;
   height: 16px;
   box-sizing: border-box;
-  container-type: inline-size;
 }
 
 .lcd-city-badge span {
   display: inline-block;
-  min-width: 100%;
-  text-align: center;
   animation: lcdScroll 12s linear infinite;
 }
 
@@ -334,7 +331,8 @@
     transform: translateX(0);
   }
   45%, 55% {
-    transform: translateX(min(0px, calc(100cqw - 100%)));
+    /* 82px max-width minus 10px horizontal padding = 72px inner width */
+    transform: translateX(min(0px, calc(72px - 100%)));
   }
   85%, 100% {
     transform: translateX(0);

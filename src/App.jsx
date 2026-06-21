@@ -369,6 +369,7 @@ function App() {
         }
       }
     } else {
+      setIsMenuOpen(false);
       setIsPlaying(false);
       const audio = audioRef.current;
       if (audio) audio.pause();
