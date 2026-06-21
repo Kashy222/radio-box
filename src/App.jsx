@@ -738,7 +738,11 @@ function App() {
                 <div className="lcd-frequency-row">
                   {/* Main digits in dot-matrix font */}
                   <div className="lcd-digits-container">
-                    <span className="lcd-freq-numbers">{frequency.toFixed(2)}</span>
+                    <span className="lcd-freq-numbers">
+                      {frequency.toFixed(2).split('.')[0]}
+                      <span className="lcd-dot">.</span>
+                      {frequency.toFixed(2).split('.')[1]}
+                    </span>
                     <span className="lcd-unit">MHz</span>
                   </div>
                 </div>
@@ -956,6 +960,15 @@ function App() {
         </div>
 
       </div>
+      {/* Invisible SVG for brushed metal filter */}
+      <svg width="0" height="0" style={{ position: 'absolute' }}>
+        <filter id="brushed-metal">
+          <feTurbulence type="fractalNoise" baseFrequency="0.005 0.5" numOctaves="3" result="noise" />
+          <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.25 0" in="noise" result="coloredNoise" />
+          <feComposite operator="in" in="coloredNoise" in2="SourceAlpha" result="textured" />
+          <feBlend mode="overlay" in="textured" in2="SourceGraphic" />
+        </filter>
+      </svg>
     </div>
   );
 }

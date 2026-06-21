@@ -53,18 +53,24 @@
 /* Flat wrapper style for the Nostalgia Logo */
 .nostalgia-logo-wrapper {
   position: relative;
-  width: 120px; /* Much wider for cursive text */
+  width: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transform: translateY(3px); /* Shift downwards to midline align with power button */
 }
 
 .nostalgia-wordmark-logo {
   display: block;
   width: 100%;
   height: auto;
-  opacity: 0.85; /* Blend slightly with the dark plastic */
-  mix-blend-mode: normal;
+  opacity: 1; /* Restore full vibrancy */
+  /* Enhance the natural copper colors, add brushed texture, and add a subtle raised effect */
+  filter: 
+    url(#brushed-metal)
+    contrast(1.1) 
+    saturate(1.1)
+    drop-shadow(0px 1px 1.5px rgba(0, 0, 0, 0.5));
 }
 
 /* Recessed pocket container for cylindrical power switch pill */
@@ -414,6 +420,10 @@
   text-shadow: 
     0 1px 1px rgba(255, 255, 255, 0.15),
     0 0 1.5px rgba(0, 0, 0, 0.35);
+}
+
+.lcd-dot {
+  font-size: 0.75em; /* Reduced by 25% */
 }
 
 .lcd-unit {
