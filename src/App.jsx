@@ -229,73 +229,14 @@ function App() {
     }
   };
 
-  // Play a realistic mechanical click sound using Web Audio API
+  // Play a realistic mechanical click sound using the provided mp3
   const playClickSound = () => {
     try {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      const ctx = new AudioCtx();
-      const now = ctx.currentTime;
-      
-      // 1. High-frequency mechanical contact click (using filtered white noise)
-      const bufferSize = Math.round(ctx.sampleRate * 0.04); // 40ms burst
-      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const channelData = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        channelData[i] = Math.random() * 2 - 1;
-      }
-      
-      const noiseSource = ctx.createBufferSource();
-      noiseSource.buffer = buffer;
-      
-      const noiseFilter = ctx.createBiquadFilter();
-      noiseFilter.type = 'bandpass';
-      noiseFilter.frequency.setValueAtTime(2200, now); // Sharp metallic band
-      noiseFilter.Q.setValueAtTime(2.5, now);
-      
-      const noiseGain = ctx.createGain();
-      noiseGain.gain.setValueAtTime(0.28, now);
-      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
-      
-      noiseSource.connect(noiseFilter);
-      noiseFilter.connect(noiseGain);
-      noiseGain.connect(ctx.destination);
-      noiseSource.start(now);
-      
-      // 2. Heavy plastic switch housing pop (low-to-mid frequency pop)
-      const popOsc = ctx.createOscillator();
-      const popGain = ctx.createGain();
-      popOsc.type = 'triangle';
-      popOsc.frequency.setValueAtTime(250, now);
-      popOsc.frequency.exponentialRampToValueAtTime(80, now + 0.05);
-      
-      popGain.gain.setValueAtTime(0.35, now);
-      popGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-      
-      popOsc.connect(popGain);
-      popGain.connect(ctx.destination);
-      popOsc.start(now);
-      popOsc.stop(now + 0.06);
-      
-      // 3. Switch spring casing resonance (metallic ring)
-      const ringOsc = ctx.createOscillator();
-      const ringGain = ctx.createGain();
-      ringOsc.type = 'sine';
-      ringOsc.frequency.setValueAtTime(1600, now);
-      ringOsc.frequency.exponentialRampToValueAtTime(900, now + 0.06);
-      
-      ringGain.gain.setValueAtTime(0.08, now);
-      ringGain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
-      
-      ringOsc.connect(ringGain);
-      ringGain.connect(ctx.destination);
-      ringOsc.start(now);
-      ringOsc.stop(now + 0.07);
-      
-      setTimeout(() => {
-        ctx.close();
-      }, 200);
+      const audio = new Audio('/button-press.mp3');
+      audio.volume = 0.4; // Toned down to feel more realistic and less jarring
+      audio.play().catch(e => console.warn("Audio play failed:", e));
     } catch (e) {
-      console.warn("Mechanical click playback failed:", e);
+      console.warn("Click sound playback failed:", e);
     }
   };
 
