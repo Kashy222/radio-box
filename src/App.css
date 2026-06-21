@@ -484,10 +484,10 @@
 
 .overlay-list-scroll {
   flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  align-content: start;
 }
 
 /* Custom Scrollbar for list */
@@ -508,14 +508,19 @@
 
 .saved-station-item-row {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 8px;
-  padding: 8px 12px;
+  padding: 8px;
   cursor: grab;
   transition: background-color 0.15s ease;
+  aspect-ratio: 1;
+  position: relative;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 .saved-station-item-row.empty {
@@ -540,7 +545,9 @@
 .saved-item-info {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
 .saved-item-freq {
@@ -568,19 +575,22 @@
 }
 
 .saved-item-empty-text {
-  color: #6b7280;
-  font-size: 0.75rem;
-  font-style: italic;
-  font-weight: 400;
+  display: none;
 }
 
 .saved-item-delete-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
   background: transparent;
   border: none;
   color: #9ca3af;
   font-size: 0.95rem;
   cursor: pointer;
   padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .saved-item-delete-btn:hover {
