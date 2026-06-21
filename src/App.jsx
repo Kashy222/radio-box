@@ -583,8 +583,13 @@ function App() {
                   <div className="lcd-station-title">
                     {activeDisplayName !== "------" && isBuffering && isPlaying ? (
                       <div className="calibrating-container">
-                        <span>CALIBRATING</span>
-                        <div className="sliding-squares-loader">
+                        <div className="sliding-squares-loader left">
+                          <div className="square"></div>
+                          <div className="square"></div>
+                          <div className="square"></div>
+                        </div>
+                        <span>TUNING</span>
+                        <div className="sliding-squares-loader right">
                           <div className="square"></div>
                           <div className="square"></div>
                           <div className="square"></div>

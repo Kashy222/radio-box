@@ -272,8 +272,8 @@
 }
 
 .sliding-squares-loader .square {
-  width: 6px;
-  height: 6px;
+  width: 4.5px;
+  height: 4.5px;
   background-color: #1c1510;
   animation: slideSquares 1.2s infinite ease-in-out;
 }
