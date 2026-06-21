@@ -50,21 +50,21 @@
   padding: 0 4px;
 }
 
-/* Flat wrapper style for the Philips Logo */
-.philips-logo-wrapper {
+/* Flat wrapper style for the Nostalgia Logo */
+.nostalgia-logo-wrapper {
   position: relative;
-  width: 63px; /* Increased by 15% from 55px */
-  height: 14px;
+  width: 120px; /* Much wider for cursive text */
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.philips-wordmark-logo {
+.nostalgia-wordmark-logo {
   display: block;
   width: 100%;
   height: auto;
-  opacity: 0.95;
+  opacity: 0.85; /* Blend slightly with the dark plastic */
+  mix-blend-mode: normal;
 }
 
 /* Recessed pocket container for cylindrical power switch pill */

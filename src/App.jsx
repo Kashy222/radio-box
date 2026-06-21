@@ -699,8 +699,8 @@ function App() {
         <div className="player-upper-block">
           {/* HEADER BAR: Philips Logo & Brushed Power Button */}
           <div className="radio-header-bar">
-            <div className="philips-logo-wrapper">
-              <img src="/philips_logo.svg" alt="Philips Logo" className="philips-wordmark-logo" />
+            <div className="nostalgia-logo-wrapper">
+              <img src="/nostalgia_logo.png" alt="Radio Nostalgia Logo" className="nostalgia-wordmark-logo" />
             </div>
 
             {/* On-Off Pill Power Switch Button with brushed metal style */}
