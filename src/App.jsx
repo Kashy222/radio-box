@@ -782,8 +782,13 @@ function App() {
             {/* Internal Saved Stations list screen overlay */}
             <div className={`saved-stations-overlay-screen ${isMenuOpen ? 'open' : 'closed'}`}>
               <div className="overlay-header">
+                <button className="overlay-back-btn" onClick={() => setIsMenuOpen(false)}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                  </svg>
+                </button>
                 <span>Saved Stations</span>
-                <button className="overlay-close-btn" onClick={() => setIsMenuOpen(false)}>×</button>
               </div>
               <div className="overlay-list-scroll">
                 {savedStations.map((station, index) => (
@@ -802,28 +807,22 @@ function App() {
                     onDragOver={(e) => e.preventDefault()}
                     onClick={() => station && handleSelectSaved(station.freq)}
                   >
-                    <div className="saved-item-info">
-                      <span className="saved-item-preset-id">P-0{index + 1}</span>
-                      {station ? (
-                        <>
-                          <span className="saved-item-freq">{station.freq.toFixed(2)} MHz</span>
-                          <span className="saved-item-name">{station.name}</span>
-                        </>
-                      ) : (
-                        <span className="saved-item-empty-text">Empty Slot</span>
-                      )}
-                    </div>
+                    <span className="saved-item-preset-id">P-0{index + 1}</span>
                     {station && (
-                      <button 
-                        className="saved-item-delete-btn" 
-                        onClick={(e) => handleDeleteSaved(index, e)}
-                        aria-label="Delete saved station"
-                      >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <line x1="18" y1="6" x2="6" y2="18"></line>
-                          <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                      </button>
+                      <>
+                        <span className="saved-item-freq">{station.freq.toFixed(2)} MHz</span>
+                        <span className="saved-item-name">{station.name}</span>
+                        <button 
+                          className="saved-item-delete-btn" 
+                          onClick={(e) => handleDeleteSaved(index, e)}
+                          aria-label="Delete saved station"
+                        >
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                          </svg>
+                        </button>
+                      </>
                     )}
                   </div>
                 ))}
