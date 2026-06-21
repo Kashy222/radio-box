@@ -618,6 +618,35 @@ function App() {
     };
   }, [frequency, isPowerOn]);
 
+  // Media Session API for background playback and lockscreen controls
+  useEffect(() => {
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: currentStation ? currentStation.name : "Radio Static",
+        artist: "Radio Nostalgia",
+        album: `${frequency.toFixed(2)} MHz`,
+        artwork: [
+          { src: '/nostalgia_logo.png', sizes: '512x512', type: 'image/png' }
+        ]
+      });
+
+      navigator.mediaSession.setActionHandler('play', () => {
+        if (!isPowerOn) {
+          togglePower();
+        } else {
+          if (audioRef.current) audioRef.current.play().catch(() => {});
+          setIsPlaying(true);
+        }
+      });
+
+      navigator.mediaSession.setActionHandler('pause', () => {
+        if (isPowerOn) {
+          togglePower();
+        }
+      });
+    }
+  }, [currentStation, frequency, isPowerOn]);
+
   // Compute position of the slider handle pointer
   const sliderPercent = ((frequency - MIN_FREQ) / (MAX_FREQ - MIN_FREQ)) * 100;
 

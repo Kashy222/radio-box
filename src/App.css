@@ -1015,6 +1015,7 @@
     0 0 0 5px #26282b; /* Thin dark outer lip */
   cursor: grab;
   z-index: 5;
+  touch-action: none; /* Prevents mobile scrolling when dragging the knob */
 }
 
 .tuning-knob-base:active {
