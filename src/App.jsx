@@ -195,6 +195,7 @@ function App() {
   
   // Nodes for Static Noise (Stereo)
   const staticGainRef = useRef(null);
+  const streamGainRef = useRef(null);
   const staticSourceRef = useRef(null);
   const streamSourceRef = useRef(null);
   
@@ -311,7 +312,13 @@ function App() {
       // Route the HTML5 audio stream through our Stereo/Mono splitter node
       try {
         const source = ctx.createMediaElementSource(audioRef.current);
-        source.connect(splitter);
+        const streamGain = ctx.createGain();
+        streamGain.gain.value = 1.0;
+        
+        source.connect(streamGain);
+        streamGain.connect(splitter);
+        
+        streamGainRef.current = streamGain;
         streamSourceRef.current = source;
       } catch (err) {
         console.warn("Could not route audio stream via Web Audio (CORS restriction). Fallback to direct stereo output.", err);
@@ -459,7 +466,15 @@ function App() {
   // Adjust audio stream volume
   useEffect(() => {
     const audio = audioRef.current;
-    audio.volume = isPlaying && isPowerOn ? stationVolume * volume : 0;
+    const computedVolume = isPlaying && isPowerOn ? stationVolume * volume : 0;
+    
+    // Apply to HTMLMediaElement (Desktop/Android)
+    audio.volume = computedVolume;
+    
+    // Apply via Web Audio GainNode (Required for iOS since it ignores HTMLMediaElement volume)
+    if (streamGainRef.current) {
+      streamGainRef.current.gain.value = computedVolume;
+    }
   }, [stationVolume, volume, isPlaying, isPowerOn]);
 
   // Control static noise volume
