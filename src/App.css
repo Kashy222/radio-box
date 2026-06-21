@@ -514,8 +514,12 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 8px;
   padding: 8px 12px;
-  cursor: pointer;
+  cursor: grab;
   transition: background-color 0.15s ease;
+}
+
+.saved-station-item-row:active {
+  cursor: grabbing;
 }
 
 .saved-station-item-row:hover {
@@ -537,6 +541,14 @@
   color: #ffffff;
   font-size: 0.85rem;
   font-weight: 700;
+}
+
+.saved-item-preset-id {
+  color: #f18225;
+  font-size: 0.65rem;
+  font-weight: 800;
+  margin-bottom: 2px;
+  opacity: 0.8;
 }
 
 .saved-station-item-row.active .saved-item-freq {

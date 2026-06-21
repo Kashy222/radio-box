@@ -130,6 +130,19 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const audioRef = useRef(null);
+  const dragItem = useRef(null);
+  const dragOverItem = useRef(null);
+
+  const handleSort = () => {
+    if (dragItem.current !== null && dragOverItem.current !== null && dragItem.current !== dragOverItem.current) {
+      let _savedStations = [...savedStations];
+      const draggedItemContent = _savedStations.splice(dragItem.current, 1)[0];
+      _savedStations.splice(dragOverItem.current, 0, draggedItemContent);
+      setSavedStations(_savedStations);
+    }
+    dragItem.current = null;
+    dragOverItem.current = null;
+  };
 
   // Geolocation logic
   useEffect(() => {
@@ -605,7 +618,7 @@ function App() {
       const stationName = currentStation && Math.abs(currentStation.freq - frequency) < 0.15
         ? currentStation.name
         : `Preset ${frequency.toFixed(2)}`;
-      setSavedStations([...savedStations, { freq: frequency, name: stationName }].sort((a, b) => a.freq - b.freq));
+      setSavedStations([...savedStations, { freq: frequency, name: stationName }]);
     }
   };
 
@@ -761,9 +774,20 @@ function App() {
                     <div 
                       key={index} 
                       className={`saved-station-item-row ${Math.abs(station.freq - frequency) < 0.05 ? 'active' : ''}`}
+                      draggable
+                      onDragStart={(e) => {
+                        dragItem.current = index;
+                        e.dataTransfer.effectAllowed = 'move';
+                      }}
+                      onDragEnter={(e) => {
+                        dragOverItem.current = index;
+                      }}
+                      onDragEnd={handleSort}
+                      onDragOver={(e) => e.preventDefault()}
                       onClick={() => handleSelectSaved(station.freq)}
                     >
                       <div className="saved-item-info">
+                        <span className="saved-item-preset-id">P-{String(index + 1).padStart(2, '0')}</span>
                         <span className="saved-item-freq">{station.freq.toFixed(2)} MHz</span>
                         <span className="saved-item-name">{station.name}</span>
                       </div>
