@@ -40,6 +40,65 @@ const NASHIK_STATIONS = [
   { freq: 104.2, name: 'SMY FM Nashik', url_resolved: 'https://nl4.mystreaming.net/uber/bollywoodlove/icecast.audio', stationuuid: 'nsk-my-1042' }
 ];
 
+const VolumeWedge = () => {
+  const segments = [];
+  const numSegments = 6;
+  const startAngle = -90;
+  const endAngle = 90;
+  const totalAngle = endAngle - startAngle;
+  const gap = 12; // degrees gap between segments
+  const segmentAngle = (totalAngle - gap * (numSegments - 1)) / numSegments;
+  
+  for (let i = 0; i < numSegments; i++) {
+    const sAngle = startAngle + i * (segmentAngle + gap);
+    const eAngle = sAngle + segmentAngle;
+    
+    // thickness grows linearly
+    const thickness = 2 + (12 * (i / (numSegments - 1)));
+    const innerRadius = 65; 
+    const outerRadius = innerRadius + thickness;
+    
+    const polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
+      const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
+      return {
+        x: centerX + (radius * Math.cos(angleInRadians)),
+        y: centerY + (radius * Math.sin(angleInRadians))
+      };
+    };
+    
+    const describeArc = (x, y, innerR, outerR, startA, endA) => {
+      const startOuter = polarToCartesian(x, y, outerR, startA);
+      const endOuter = polarToCartesian(x, y, outerR, endA);
+      const startInner = polarToCartesian(x, y, innerR, startA);
+      const endInner = polarToCartesian(x, y, innerR, endA);
+      
+      const largeArcFlag = endA - startA <= 180 ? "0" : "1";
+      
+      return [
+        "M", startOuter.x, startOuter.y,
+        "A", outerR, outerR, 0, largeArcFlag, 1, endOuter.x, endOuter.y,
+        "L", endInner.x, endInner.y,
+        "A", innerR, innerR, 0, largeArcFlag, 0, startInner.x, startInner.y,
+        "Z"
+      ].join(" ");
+    };
+    
+    segments.push(
+      <path 
+        key={i}
+        d={describeArc(80, 80, innerRadius, outerRadius, sAngle, eAngle)}
+        fill="#55585d"
+      />
+    );
+  }
+  
+  return (
+    <svg className="volume-wedge" width="160" height="160" style={{position: 'absolute', top: 0, left: 0, pointerEvents: 'none'}}>
+      {segments}
+    </svg>
+  );
+};
+
 function App() {
   const [currentCity, setCurrentCity] = useState('Detecting Location...');
   const [stations, setStations] = useState(DEFAULT_STATIONS);
@@ -51,8 +110,23 @@ function App() {
   const [isBuffering, setIsBuffering] = useState(false); // Track if audio is currently buffering
   const [isMono, setIsMono] = useState(false);
   const [isPowerOn, setIsPowerOn] = useState(false); // Power state defaults to off
- 
-  const [savedStations, setSavedStations] = useState([]);
+  const [savedStations, setSavedStations] = useState(() => {
+    try {
+      const saved = localStorage.getItem('radioPresets');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error('Failed to load presets', e);
+    }
+    return [];
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('radioPresets', JSON.stringify(savedStations));
+    } catch (e) {
+      console.error('Failed to save presets', e);
+    }
+  }, [savedStations]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const audioRef = useRef(null);
@@ -114,6 +188,10 @@ function App() {
   const sliderTrackRef = useRef(null);
   const isDraggingVolume = useRef(false);
   const isDraggingSlider = useRef(false);
+  const lastDragAngle = useRef(null);
+  const accumulatedKnobAngle = useRef(0);
+  const lastVolumeAngle = useRef(null);
+  const accumulatedVolumeAngle = useRef(0);
 
   // Initialize Audio Element with CORS support
   if (!audioRef.current) {
@@ -412,45 +490,80 @@ function App() {
     initAudioContext();
   };
 
-  // Fine tuning steps
-  const stepTuning = (direction) => {
-    if (!isPowerOn) return;
-    let newFreq = frequency + direction * 0.1;
-    newFreq = Math.max(MIN_FREQ, Math.min(MAX_FREQ, newFreq));
-    setFrequency(Math.round(newFreq * 10) / 10);
-    initAudioContext();
-  };
 
-  // Drag handlers for Vertical Volume Slider (invisible overlay track)
+
+  // Drag handlers for Rotary Volume Knob
   const handleVolumePointerDown = (e) => {
-    if (!isPowerOn) return;
+    if (!isPowerOn || !volumeTrackRef.current) return;
     isDraggingVolume.current = true;
-    updateVolume(e);
+    
+    const rect = volumeTrackRef.current.getBoundingClientRect();
+    const cX = rect.left + rect.width / 2;
+    const cY = rect.top + rect.height / 2;
+    let angle = Math.atan2(e.clientY - cY, e.clientX - cX) * (180 / Math.PI);
+    lastVolumeAngle.current = angle;
+    accumulatedVolumeAngle.current = -90 + (volume * 180);
+    
     e.preventDefault();
   };
 
   const updateVolume = (e) => {
-    if (!isPowerOn || !volumeTrackRef.current) return;
+    if (!isPowerOn || !volumeTrackRef.current || lastVolumeAngle.current === null) return;
     const rect = volumeTrackRef.current.getBoundingClientRect();
-    const relativeY = rect.bottom - e.clientY;
-    const percent = Math.max(0, Math.min(1, relativeY / rect.height));
+    const cX = rect.left + rect.width / 2;
+    const cY = rect.top + rect.height / 2;
+    
+    let angle = Math.atan2(e.clientY - cY, e.clientX - cX) * (180 / Math.PI);
+    let delta = angle - lastVolumeAngle.current;
+    
+    if (delta > 180) delta -= 360;
+    if (delta < -180) delta += 360;
+    
+    lastVolumeAngle.current = angle;
+    
+    let newAngle = accumulatedVolumeAngle.current + delta;
+    newAngle = Math.max(-90, Math.min(90, newAngle));
+    accumulatedVolumeAngle.current = newAngle;
+    
+    const percent = (newAngle + 90) / 180;
     setVolume(percent);
     initAudioContext();
   };
 
   // Drag handlers for the main horizontal tuning slider
   const handleSliderPointerDown = (e) => {
-    if (!isPowerOn) return;
+    if (!isPowerOn || !sliderTrackRef.current) return;
     isDraggingSlider.current = true;
-    updateSliderTuning(e);
+    
+    const rect = sliderTrackRef.current.getBoundingClientRect();
+    const cX = rect.left + rect.width / 2;
+    const cY = rect.top + rect.height / 2;
+    let angle = Math.atan2(e.clientY - cY, e.clientX - cX) * (180 / Math.PI);
+    lastDragAngle.current = angle;
+    accumulatedKnobAngle.current = -135 + ((frequency - MIN_FREQ) / (MAX_FREQ - MIN_FREQ)) * 270;
+    
     e.preventDefault();
   };
 
-  const updateSliderTuning = (e) => {
-    if (!isPowerOn || !sliderTrackRef.current) return;
+  const updateKnobTuning = (e) => {
+    if (!isPowerOn || !sliderTrackRef.current || lastDragAngle.current === null) return;
     const rect = sliderTrackRef.current.getBoundingClientRect();
-    const relativeX = e.clientX - rect.left;
-    const percent = Math.max(0, Math.min(1, relativeX / rect.width));
+    const cX = rect.left + rect.width / 2;
+    const cY = rect.top + rect.height / 2;
+    
+    let angle = Math.atan2(e.clientY - cY, e.clientX - cX) * (180 / Math.PI);
+    let delta = angle - lastDragAngle.current;
+    
+    if (delta > 180) delta -= 360;
+    if (delta < -180) delta += 360;
+    
+    lastDragAngle.current = angle;
+    
+    let newAngle = accumulatedKnobAngle.current + delta;
+    newAngle = Math.max(-135, Math.min(135, newAngle));
+    accumulatedKnobAngle.current = newAngle;
+    
+    const percent = (newAngle + 135) / 270;
     const newFreq = MIN_FREQ + (percent * (MAX_FREQ - MIN_FREQ));
     const snapped = Math.round(newFreq * 10) / 10;
     setFrequency(snapped);
@@ -463,7 +576,7 @@ function App() {
         updateVolume(e);
       }
       if (isDraggingSlider.current) {
-        updateSliderTuning(e);
+        updateKnobTuning(e);
       }
     };
 
@@ -566,6 +679,14 @@ function App() {
             
             <div className="screen-inner-layout">
               <div className="lcd-city-badge">{currentCity}</div>
+              {volume === 0 && (
+                <div className="lcd-mute-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+                  </svg>
+                  <span>MUTE</span>
+                </div>
+              )}
               
               {/* Info Group Wrapper */}
               <div className="lcd-info-group">
@@ -661,42 +782,59 @@ function App() {
           </div>
         </div>
 
-        {/* SECTION 2: Horizontal Tuning Slider Control */}
-        <div className={`scale-and-slider-controls ${isPowerOn ? 'on' : 'off'}`}>
-          <div className="tuning-slider-row-layout">
-            {/* Left step tuning button */}
-            <button className="tuning-step-arrow-btn" onClick={() => stepTuning(-1)} aria-label="Step Tuning Down">
-              <svg viewBox="0 0 24 24" width="14" height="14">
-                <polygon points="16,6 8,12 16,18" />
-              </svg>
-            </button>
-
-            {/* Recessed Slider Track and Bullet/Pentagon Handle */}
-            <div className="horizontal-tuning-slider-wrapper">
-              {/* Volume slider overlay track */}
-              <div className="vertical-volume-touch-zone" ref={volumeTrackRef} onPointerDown={handleVolumePointerDown}></div>
-
-              {/* Main horizontal frequency slider */}
+        {/* SECTION 2: Rotary Knobs */}
+        <div className={`rotary-knobs-section ${isPowerOn ? 'on' : 'off'}`}>
+          <div className="rotary-tuning-knob-container">
+            <div className="outer-ring-ticks">
+              <div className="tick tick-1"></div>
+              <div className="tick tick-2"></div>
+              <div className="tick tick-3"></div>
+              <div className="tick tick-4"></div>
+              <div className="tick tick-5"></div>
+              
+              <div className="sub-tick sub-1"></div>
+              <div className="sub-tick sub-2"></div>
+              <div className="sub-tick sub-3"></div>
+              <div className="sub-tick sub-4"></div>
+              <div className="sub-tick sub-5"></div>
+              <div className="sub-tick sub-6"></div>
+              <div className="sub-tick sub-7"></div>
+              <div className="sub-tick sub-8"></div>
+            </div>
+            
+            <div 
+              className="tuning-knob-base"
+              ref={sliderTrackRef}
+              onPointerDown={handleSliderPointerDown}
+            >
               <div 
-                className="horizontal-tuning-slider-track" 
-                ref={sliderTrackRef}
-                onPointerDown={handleSliderPointerDown}
+                className="knob-indicator-notch"
+                style={{ transform: `rotate(${-135 + sliderPercent * 2.7}deg)` }}
+              ></div>
+            </div>
+            
+            <div className="tuning-knob-label">TUNING</div>
+          </div>
+          
+          <div className="rotary-tuning-knob-container volume-knob-wrapper">
+            <VolumeWedge />
+            
+            <div 
+              className="tuning-knob-base"
+              ref={volumeTrackRef}
+              onPointerDown={handleVolumePointerDown}
+            >
+              <div 
+                className="volume-indicator-triangle"
+                style={{ transform: `rotate(${-90 + volume * 180}deg)` }}
               >
-                <div 
-                  className="bullet-slider-thumb-handle"
-                  style={{ left: `calc(${sliderPercent}% - 9px)` }}
-                >
-                  <div className="bullet-handle-center-dot" />
-                </div>
+                <svg width="11" height="9" viewBox="0 0 11 9">
+                  <polygon points="5.5,0 11,9 0,9" fill="#121315" />
+                </svg>
               </div>
             </div>
-
-            {/* Right step tuning button */}
-            <button className="tuning-step-arrow-btn" onClick={() => stepTuning(1)} aria-label="Step Tuning Up">
-              <svg viewBox="0 0 24 24" width="14" height="14">
-                <polygon points="8,6 16,12 8,18" />
-              </svg>
-            </button>
+            
+            <div className="tuning-knob-label">VOL</div>
           </div>
         </div>
 
@@ -715,13 +853,13 @@ function App() {
           {/* Centered Skip pill buttons |◀ and ▶| */}
           <div className={`footer-centered-pill ${isPowerOn ? '' : 'disabled'}`}>
             <button className="skip-btn prev" onClick={handlePrevStation} aria-label="Previous Station">
-              <svg viewBox="0 0 24 24" width="14" height="14">
+              <svg viewBox="0 0 24 24" width="16" height="16">
                 <path d="M6 6h2v12H6zm3.5 6L18 6v12z" />
               </svg>
             </button>
             <div className="pill-divider-line"></div>
             <button className="skip-btn next" onClick={handleNextStation} aria-label="Next Station">
-              <svg viewBox="0 0 24 24" width="14" height="14">
+              <svg viewBox="0 0 24 24" width="16" height="16">
                 <path d="M6 18V6l8.5 6zm10-12h2v12h-2z" />
               </svg>
             </button>
