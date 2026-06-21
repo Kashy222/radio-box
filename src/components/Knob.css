@@ -1,0 +1,44 @@
+.braun-knob {
+  position: relative;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 40%, #f4f4f4 0%, #e0e0e0 60%, #c4c4c4 100%);
+  border: 1px solid #d0d0d0;
+  cursor: grab;
+  /* Long diagonal shadow matching the Braun design */
+  box-shadow: 
+    -22px 22px 30px rgba(0, 0, 0, 0.24),
+    inset 0 3px 5px rgba(255, 255, 255, 0.8),
+    inset 0 -3px 5px rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.braun-knob:active {
+  cursor: grabbing;
+}
+
+/* Shading ring overlay */
+.knob-shading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0.2) 100%);
+  pointer-events: none;
+}
+
+/* Flat black line indicator on volume knob */
+.knob-pointer-line {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  width: 20px;
+  height: 2px;
+  background-color: #000;
+  transform: translateY(-50%);
+  transform-origin: left center;
+  border-radius: 1px;
+}

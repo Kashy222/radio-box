@@ -1,0 +1,785 @@
+@import url('https://fonts.googleapis.com/css2?family=Doto:wght@800&display=swap');
+
+/* General Page Adjustments */
+body {
+  background-color: #0f1012;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.modern-retro-player-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Radio Main Body (Casing) */
+.player-body {
+  width: 320px;
+  height: 540px;
+  background-color: #3b3d42;
+  background-image: linear-gradient(180deg, #44464c 0%, #2f3035 100%);
+  border-radius: 20px;
+  border: 1px solid #232427;
+  box-shadow: 
+    0 25px 60px rgba(0, 0, 0, 0.8),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.12),
+    inset 0 -2.5px 4px rgba(0, 0, 0, 0.65);
+  padding: 12px 16px 16px 16px; /* Top padding reduced to 12px for equidistant header spacing */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Container to group header and screen and prevent distributed flex stretching */
+.player-upper-block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Equidistant spacing below the header bar elements */
+  width: 100%;
+}
+
+/* =========================================
+   HEADER BAR: Philips Shield Logo & Power Switch
+   ========================================= */
+.radio-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  height: 32px; /* Matches power button pocket height exactly */
+  padding: 0 4px;
+}
+
+/* Flat wrapper style for the Philips Logo */
+.philips-logo-wrapper {
+  position: relative;
+  width: 63px; /* Increased by 15% from 55px */
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.philips-wordmark-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+  opacity: 0.95;
+}
+
+/* Recessed pocket container for cylindrical power switch pill */
+.header-power-btn-pocket {
+  background: #0f1012;
+  padding: 1.5px;
+  border-radius: 15px;
+  border-top: 1px solid #000;
+  border-left: 1px solid #000;
+  border-right: 1.5px solid #2f3035;
+  border-bottom: 1.5px solid #2f3035;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.85),
+    0 1px 1px rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 30px;
+  box-sizing: border-box;
+}
+
+/* Brushed metal cylindrical power switch handle (horizontal pill shape) */
+.header-power-btn-pill {
+  width: 47px;
+  height: 27px;
+  border-radius: 13.5px;
+  border: 1px solid #484b52;
+  background-color: #55575e;
+  /* Smoothed anisotropic reflection gradients */
+  background-image: 
+    linear-gradient(to bottom, 
+      rgba(255, 255, 255, 0.25) 0%, 
+      rgba(255, 255, 255, 0.05) 25%, 
+      rgba(0, 0, 0, 0.15) 50%, 
+      rgba(255, 255, 255, 0.05) 75%, 
+      rgba(0, 0, 0, 0.45) 100%),
+    linear-gradient(90deg, 
+      #4b4e56 0%, 
+      #636772 25%, 
+      #3f4147 50%, 
+      #636772 75%, 
+      #4b4e56 100%);
+  background-blend-mode: overlay;
+  box-shadow: 
+    0 3px 6px rgba(0, 0, 0, 0.55),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+}
+
+.header-power-btn-pill::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 13.5px;
+  /* Fine brushed metal vertical grain texture overlay (softer opacity) */
+  background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0px, rgba(255, 255, 255, 0.04) 1px, transparent 1px, transparent 2px);
+  pointer-events: none;
+}
+
+.header-power-btn-pill:active,
+.header-power-btn-pill.active {
+  /* Push down slightly to feel interactive */
+  transform: scale(0.96);
+}
+
+.header-power-btn-pill.active {
+  background-color: #3b3d42;
+  box-shadow: 
+    0 1px 2px rgba(0, 0, 0, 0.35),
+    inset 0 2px 4px rgba(0, 0, 0, 0.5),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.12);
+}
+
+/* Glowing white power icon when active */
+.header-power-btn-pill.active svg {
+  stroke: #ffffff;
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.95));
+}
+
+/* =========================================
+   SECTION 1: Orange Display Screen
+   ========================================= */
+.orange-display-screen {
+  background-color: #060708;
+  border-radius: 16px;
+  border: 1.5px solid #1a1a1c;
+  height: 220px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    inset 0 10px 20px rgba(0, 0, 0, 0.95),
+    0 1px 1px rgba(255, 255, 255, 0.02);
+  box-sizing: border-box;
+  transition: border-color 0.5s ease;
+}
+
+/* Orange backlight layer */
+.orange-display-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle, #f18225 0%, #a44813 60%, #4c1b03 100%);
+  box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.65);
+  opacity: 1;
+  z-index: 1;
+  /* Light up immediately on power-on, fade out slowly on power-off */
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.orange-display-screen.off {
+  border-color: #1a1a1c;
+}
+
+/* Delay the backlight fade-out on turn-off so text disappears first */
+.orange-display-screen.off::before {
+  opacity: 0;
+  transition-delay: 0.15s;
+}
+
+.screen-reflection {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 65%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.screen-inner-layout {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 14px 16px 0 16px; /* Adjusted to fit the full-bleed tuner band at bottom */
+  box-sizing: border-box;
+  position: relative; /* Establish stacking context to paint above pseudo-backlight */
+  z-index: 3;
+  /* Font opacity fades out fast when turning off, instantly, and fades in fast */
+  transition: opacity 0.15s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.orange-display-screen.off .screen-inner-layout {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.lcd-info-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+  flex: 1; /* allow it to take up space and center items */
+  padding-top: 8px; /* shift contents down slightly */
+}
+
+/* Station Title Container */
+.lcd-station-title-box {
+  padding: 4px 12px;
+  max-width: 200px;
+  margin: 0 auto;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* Station Title (using dot-matrix font, truncated) */
+.lcd-station-title {
+  font-family: 'Doto', monospace;
+  font-weight: 800;
+  font-size: 0.935rem; /* Increased by 10% from 0.85rem */
+  color: #1c1510;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.15);
+  letter-spacing: 0.5px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Preset Badge on LCD Screen */
+.lcd-preset-badge {
+  font-family: 'Doto', monospace;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #1c1510;
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  opacity: 0.85;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.15);
+  border: 1px dotted rgba(28, 21, 16, 0.35);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+/* Bottom tuner container inside the screen (no background or border) */
+.lcd-tuner-container {
+  margin-left: -16px;
+  margin-right: -16px;
+  padding: 4px 0px 8px 0px;
+  box-sizing: border-box;
+}
+
+/* Frequency row layout */
+.lcd-frequency-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+}
+
+.lcd-digits-container {
+  display: flex;
+  align-items: baseline;
+}
+
+/* Custom digital dot-matrix font styling for the frequency digits */
+.lcd-freq-numbers {
+  font-family: 'Doto', monospace;
+  font-size: 2.65rem; /* Increased size by 10% */
+  font-weight: 800;
+  color: #1c1510;
+  letter-spacing: 1px;
+  line-height: 1;
+  text-shadow: 
+    0 1px 1px rgba(255, 255, 255, 0.15),
+    0 0 1.5px rgba(0, 0, 0, 0.35);
+}
+
+.lcd-unit {
+  font-family: 'Doto', monospace;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #1c1510;
+  margin-left: 6px;
+  text-shadow: 
+    0 1px 1px rgba(255, 255, 255, 0.15),
+    0 0 1.5px rgba(0, 0, 0, 0.35);
+}
+
+/* Left and Right Side Signal Grid Ticks */
+.lcd-side-meter {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  opacity: 0.65;
+}
+
+.meter-tick {
+  width: 7px;
+  height: 2px;
+  background-color: #ffffff;
+  border-radius: 0.5px;
+}
+
+/* Spacer row replacing the visualizer/switcher panel */
+.lcd-bottom-spacer {
+  height: 10px;
+}
+
+/* =========================================
+   INTERNAL SCREEN OVERLAY: Saved Stations
+   ========================================= */
+.saved-stations-overlay-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(14, 15, 17, 0.96);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 12px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.saved-stations-overlay-screen.closed {
+  transform: translateY(100%);
+}
+
+.saved-stations-overlay-screen.open {
+  transform: translateY(0);
+}
+
+.overlay-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+}
+
+.overlay-header span {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.overlay-close-btn {
+  background: transparent;
+  border: none;
+  color: #a3a3a3;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.overlay-list-scroll {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Custom Scrollbar for list */
+.overlay-list-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.overlay-list-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+.empty-saved-msg {
+  color: #6b7280;
+  font-size: 0.75rem;
+  text-align: center;
+  padding-top: 40px;
+}
+
+.saved-station-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.saved-station-item-row:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.saved-station-item-row.active {
+  border-color: #f18225;
+  background: rgba(241, 130, 37, 0.12);
+}
+
+.saved-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.saved-item-freq {
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.saved-station-item-row.active .saved-item-freq {
+  color: #f18225;
+}
+
+.saved-item-name {
+  color: #9ca3af;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.saved-item-delete-btn {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.saved-item-delete-btn:hover {
+  color: #ef4444;
+}
+
+/* =========================================
+   SECTION 2: Horizontal Tuning Scale & Slider
+   ========================================= */
+/* =========================================
+   SECTION 2: Horizontal Tuning Slider
+   ========================================= */
+.scale-and-slider-controls {
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+  box-sizing: border-box;
+}
+
+.scale-and-slider-controls.off {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* Horizontal alignment of the slider track flanked by the two step buttons */
+.tuning-slider-row-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+
+.ruler-ticks-viewport {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end; /* Ticks point upwards from the bottom */
+  flex: 1;
+  height: 38px; /* Reduced height to minimize spacing between numbers and lines */
+  position: relative;
+  box-sizing: border-box;
+  margin-top: 4px;
+}
+
+.ruler-tick-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  flex: 1;
+  height: 100%;
+}
+
+.ruler-tick-num-lbl {
+  font-family: 'Doto', monospace;
+  font-size: 0.85rem; /* Clean font size */
+  font-weight: 800;
+  color: rgba(28, 21, 16, 0.75); /* Softer label color matching the screen theme */
+  position: absolute;
+  top: 0px; /* Align neatly at the top */
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+/* Ticks inside orange display screen, standing on the bottom */
+.ruler-tick-line-mark {
+  width: 1px; /* Thinner normal tick line */
+  height: 8px; /* Taller tick mark */
+  background-color: rgba(28, 21, 16, 0.35); /* Softer opacity */
+  position: absolute;
+  bottom: 0px;
+}
+
+.ruler-tick-item.labeled .ruler-tick-line-mark {
+  width: 1.5px; /* Bolder labeled ticks */
+  height: 14px; /* Taller labeled ticks */
+  background-color: rgba(28, 21, 16, 0.6);
+}
+
+/* Metallic silver pointer needle standing from the bottom of the screen */
+.lcd-tuner-pointer {
+  position: absolute;
+  bottom: -8px; /* Extends to the absolute bottom of the screen container */
+  width: 3.5px; /* Rounded pill style needle */
+  height: 28px; /* Taller needle to extend from bottom and span ticks */
+  background: linear-gradient(90deg, #70747c 0%, #d8dbe2 50%, #585b62 100%); /* Matte steel silver finish */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  border-radius: 1.5px;
+  transform: translateX(-50%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Glowing green center indicator tick */
+.ruler-tick-line-mark.green-glow {
+  background-color: #22c55e;
+  box-shadow: 0 0 5px #22c55e;
+  height: 12px;
+  bottom: -12px;
+  width: 1.5px;
+  z-index: 5;
+}
+
+/* Dark, rounded-square step tuning buttons flanking the scale */
+.tuning-step-arrow-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #2b2c31 0%, #17181c 100%);
+  border: 1px solid #131416;
+  box-shadow: 
+    0 1.5px 3px rgba(0, 0, 0, 0.45),
+    inset 0 1px 1px rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+.tuning-step-arrow-btn:active {
+  background: linear-gradient(180deg, #17181c 0%, #0d0e10 100%);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.tuning-step-arrow-btn svg {
+  fill: #8e9196;
+}
+
+.tuning-step-arrow-btn:active svg {
+  fill: #ffffff;
+}
+
+/* Recessed Horizontal Slider Track */
+.horizontal-tuning-slider-wrapper {
+  position: relative;
+  height: 30px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Invisible Vertical volume touch zone */
+.vertical-volume-touch-zone {
+  position: absolute;
+  left: 0;
+  top: -12px;
+  width: 32px;
+  height: 54px;
+  z-index: 8;
+  cursor: ns-resize;
+}
+
+.horizontal-tuning-slider-track {
+  width: 100%;
+  height: 10px;
+  background: #111214;
+  border-radius: 5px;
+  border: 1px solid #232427;
+  box-shadow: 
+    inset 0 2.5px 3px rgba(0, 0, 0, 0.95),
+    0 1px 1px rgba(255, 255, 255, 0.05);
+  position: relative;
+  cursor: pointer;
+}
+
+/* Pentagon bullet handle pointer */
+.bullet-slider-thumb-handle {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 28px;
+  background: linear-gradient(180deg, #ffffff 0%, #d8dadf 40%, #a1a3a8 100%);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 100%, 0% 100%, 0% 25%);
+  box-shadow: 
+    0 2px 5px rgba(0, 0, 0, 0.4),
+    inset 0 1px 1px #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 6;
+  cursor: grab;
+}
+
+.bullet-slider-thumb-handle:active {
+  cursor: grabbing;
+}
+
+.bullet-handle-center-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background-color: #3b3d42;
+  margin-top: 6px;
+}
+
+/* =========================================
+   SECTION 3: Bottom Action Footer Bar
+   ========================================= */
+/* Single continuous bar panel enclosing all buttons as in mockup */
+.bottom-action-footer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(180deg, #2b2c31 0%, #151619 100%);
+  border: 1px solid #111214;
+  border-radius: 8px;
+  padding: 2px;
+  box-shadow: 
+    0 4px 10px rgba(0, 0, 0, 0.45),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.08);
+  height: 42px;
+  margin-top: 15px;
+  box-sizing: border-box;
+}
+
+/* Standard button inside the footer bar */
+.footer-icon-btn {
+  width: 50px;
+  height: 36px;
+  background: transparent;
+  border: none;
+  color: #8e8f92;
+  font-size: 1.25rem;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.footer-icon-btn:active:not(.disabled) {
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.footer-icon-btn.active {
+  color: #ffffff;
+}
+
+.footer-icon-btn.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Left button rounded-left corner */
+.menu-btn {
+  border-radius: 6px 0 0 6px;
+}
+
+/* Right button rounded-right corner */
+.plus-btn {
+  border-radius: 0 6px 6px 0;
+}
+
+/* Skip Buttons grouped in center pill */
+.footer-centered-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  height: 36px;
+  background: linear-gradient(180deg, #202124 0%, #0c0d0f 100%);
+  border: 1px solid #101113;
+  border-radius: 18px;
+  box-shadow: 
+    inset 0 1.5px 2px rgba(0, 0, 0, 0.9),
+    0 1px 1px rgba(255, 255, 255, 0.03);
+  padding: 0 14px;
+  box-sizing: border-box;
+  margin: 0 4px;
+  transition: opacity 0.4s ease;
+}
+
+.footer-centered-pill.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.skip-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.skip-btn svg {
+  fill: #8e8f92;
+  transition: fill 0.15s ease;
+}
+
+.skip-btn:active svg {
+  fill: #ffffff;
+}
+
+.pill-divider-line {
+  width: 1px;
+  height: 18px;
+  background-color: #111214;
+  box-shadow: 1px 0 0 rgba(255, 255, 255, 0.05);
+}

@@ -1,0 +1,59 @@
+.radio-braun-wrapper {
+  position: relative;
+  width: 900px;
+  height: 254px; /* Matches 900px width with aspect ratio of the 1024x289 image */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+  /* Add subtle shadow around the whole radio body */
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.radio-braun-body {
+  width: 100%;
+  height: 100%;
+  background: url('/braun_bg.png') no-repeat center center;
+  background-size: 100% 100%;
+  position: relative;
+}
+
+/* Knob Positions - Placed precisely on top of the image knobs */
+.knob-slot {
+  position: absolute;
+  z-index: 15;
+}
+
+.volume-slot {
+  left: 7.9%;
+  top: 55.4%;
+}
+
+.tone-slot {
+  left: 29.5%;
+  top: 55.4%;
+}
+
+.tuner-slot {
+  left: 51.1%;
+  top: 55.4%;
+}
+
+/* Hide the labels under knobs since they are already printed on the background image */
+.knob-text-label {
+  display: none;
+}
+
+/* Cover overlay to hide the bottom right buttons (FM, AM, SW) */
+.buttons-hide-overlay {
+  position: absolute;
+  left: 71.5%;
+  top: 55%;
+  width: 26.5%;
+  height: 40%;
+  background-color: #dcdcdc; /* Color matched to the Braun chassis matte gray */
+  z-index: 14;
+  box-shadow: inset 1px 1px 3px rgba(255, 255, 255, 0.2);
+}

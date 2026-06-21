@@ -1,0 +1,47 @@
+.braun-scale-overlay {
+  position: absolute;
+  top: 13.5%;
+  left: 5.4%;
+  width: 57.2%;
+  height: 33%;
+  z-index: 10;
+  pointer-events: none; /* Let clicks pass through to background */
+}
+
+/* Green Tuning Needle */
+.tuner-needle-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: #03a84e; /* Vintage green dial needle */
+  box-shadow: 
+    -2px 0 5px rgba(3, 168, 78, 0.4),
+    0 0 1px rgba(0, 0, 0, 0.5);
+  transform: translateX(-50%);
+  transition: left 0.08s ease-out;
+  z-index: 12;
+}
+
+/* Watermark Station text on the glass */
+.scale-station-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Inter', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.12); /* Extremely subtle watermark */
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 11;
+  transition: all 0.2s ease;
+}
+
+.scale-station-watermark.active {
+  color: rgba(3, 168, 78, 0.18); /* Becomes slightly green-faded when tuned */
+  text-shadow: 0 0 1px rgba(3, 168, 78, 0.05);
+}
