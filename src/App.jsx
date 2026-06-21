@@ -639,9 +639,11 @@ function App() {
 
   const handleDeleteSaved = (indexToDelete, e) => {
     e.stopPropagation();
-    const newStations = [...savedStations];
-    newStations[indexToDelete] = null;
-    setSavedStations(newStations);
+    if (window.confirm("Are you sure you want to delete this saved station?")) {
+      const newStations = [...savedStations];
+      newStations[indexToDelete] = null;
+      setSavedStations(newStations);
+    }
   };
 
   const handleSelectSaved = (freq) => {

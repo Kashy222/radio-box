@@ -548,6 +548,8 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
+  width: 100%;
+  overflow: hidden;
 }
 
 .saved-item-freq {
@@ -572,6 +574,10 @@
   color: #9ca3af;
   font-size: 0.7rem;
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .saved-item-empty-text {
