@@ -262,7 +262,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 12px; /* Increased spacing between text and animations */
 }
 
 .sliding-squares-loader {
@@ -272,10 +272,11 @@
 }
 
 .sliding-squares-loader .square {
-  width: 4.5px;
-  height: 4.5px;
+  width: 3.9px; /* Reduced by 35% from original 6px */
+  height: 3.9px;
   background-color: #1c1510;
-  animation: slideSquares 1.2s infinite ease-in-out;
+  border-radius: 1px; /* Slight rounding for LCD feel */
+  animation: lcdPulse 1s infinite;
 }
 
 .sliding-squares-loader .square:nth-child(1) {
@@ -283,18 +284,17 @@
 }
 
 .sliding-squares-loader .square:nth-child(2) {
-  animation-delay: 0.2s;
+  animation-delay: 0.15s;
 }
 
 .sliding-squares-loader .square:nth-child(3) {
-  animation-delay: 0.4s;
+  animation-delay: 0.3s;
 }
 
-@keyframes slideSquares {
-  0% { opacity: 0; transform: translateX(-4px); }
-  30% { opacity: 0.8; transform: translateX(0); }
-  70% { opacity: 0.8; transform: translateX(0); }
-  100% { opacity: 0; transform: translateX(4px); }
+/* More intricate pulsing animation for LCD feel */
+@keyframes lcdPulse {
+  0%, 100% { opacity: 0.15; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.1); }
 }
 
 /* City Badge on LCD Screen */
