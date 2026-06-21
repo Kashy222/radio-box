@@ -268,6 +268,23 @@ body {
   white-space: nowrap;
 }
 
+/* City Badge on LCD Screen */
+.lcd-city-badge {
+  font-family: 'Doto', monospace;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #1c1510;
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  opacity: 0.85;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.15);
+  border: 1px dotted rgba(28, 21, 16, 0.35);
+  padding: 1px 4px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
 /* Preset Badge on LCD Screen */
 .lcd-preset-badge {
   font-family: 'Doto', monospace;

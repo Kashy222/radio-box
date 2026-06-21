@@ -4,38 +4,90 @@ import './App.css';
 const MIN_FREQ = 87.5;
 const MAX_FREQ = 108.0;
 
-const INDIAN_STATIONS = [
-  { freq: 91.1, name: 'Radio City', url_resolved: 'http://prclive1.listenon.in:9960/;', stationuuid: 'ind-rc-911' },
-  { freq: 91.9, name: 'Radio One', url_resolved: 'https://stream.zeno.fm/84h97t3ewg0uv', stationuuid: 'ind-ro-919' },
-  { freq: 92.7, name: 'BIG FM', url_resolved: 'https://stream.zeno.fm/dbstwo3dvhhtv', stationuuid: 'ind-big-927' },
-  { freq: 93.5, name: 'Red FM', url_resolved: 'https://stream-174.zeno.fm/q97eczydqrhvv', stationuuid: 'ind-red-935' },
-  { freq: 94.3, name: 'Radio One', url_resolved: 'https://strmreg.1.fm/bombaybeats_mobile_mp3', stationuuid: 'ind-ro-943' },
-  { freq: 95.0, name: 'Radio City Hits', url_resolved: 'http://prclive1.listenon.in:8832', stationuuid: 'ind-rc-950' },
+const DEFAULT_STATIONS = [
+  { freq: 91.1, name: 'Radio City', url_resolved: 'https://drive.uber.radio/uber/bollywood2000s/icecast.audio', stationuuid: 'ind-rc-911' },
+  { freq: 91.9, name: 'Radio One', url_resolved: 'https://strmreg.1.fm/bombaybeats_mobile_mp3', stationuuid: 'ind-ro-919' },
+  { freq: 92.7, name: 'BIG FM', url_resolved: 'https://a9newhits-a9media.radioca.st/stream', stationuuid: 'ind-big-927' },
+  { freq: 93.5, name: 'Red FM', url_resolved: 'https://funasia.streamguys1.com/live9', stationuuid: 'ind-red-935' },
+  { freq: 94.3, name: 'Radio One Hits', url_resolved: 'https://strmreg.1.fm/bombaybeats_mobile_mp3', stationuuid: 'ind-ro-943' },
+  { freq: 95.0, name: 'Radio City Hits', url_resolved: 'https://server.mixify.in/listen/new_hits/radio.mp3', stationuuid: 'ind-rc-950' },
   { freq: 98.3, name: 'Radio Mirchi', url_resolved: 'https://eu8.fastcast4u.com/proxy/clyedupq/stream', stationuuid: 'ind-rm-983' },
   { freq: 100.1, name: 'AIR FM Gold', url_resolved: 'https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio005/hlspbaudio00564kbps.m3u8', stationuuid: 'ind-gold-1001' },
   { freq: 101.4, name: 'AIR Akashvani', url_resolved: 'https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio002/hlspbaudio002_Auto.m3u8', stationuuid: 'ind-air-1014' },
   { freq: 102.8, name: 'Vividh Bharati', url_resolved: 'https://air.pc.cdn.bitgravity.com/air/live/pbaudio001/playlist.m3u8', stationuuid: 'ind-vb-1028' },
-  { freq: 104.0, name: 'Fever FM', url_resolved: 'https://stream.zeno.fm/n2fd0edh9k8uv', stationuuid: 'ind-fever-1040' },
+  { freq: 104.0, name: 'Fever FM', url_resolved: 'https://a9oldhits-a9media.radioca.st/stream', stationuuid: 'ind-fever-1040' },
   { freq: 104.2, name: 'MY FM', url_resolved: 'https://nl4.mystreaming.net/uber/bollywoodlove/icecast.audio', stationuuid: 'ind-my-1042' },
   { freq: 104.8, name: 'Ishq FM', url_resolved: 'https://drive.uber.radio/uber/bollywoodnow/icecast.audio', stationuuid: 'ind-ishq-1048' },
   { freq: 107.1, name: 'AIR FM Rainbow', url_resolved: 'https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio002/hlspbaudio002_Auto.m3u8', stationuuid: 'ind-rainbow-1071' }
 ];
 
+const MUMBAI_STATIONS = [
+  { freq: 91.1, name: 'Radio City Mumbai', url_resolved: 'https://drive.uber.radio/uber/bollywood2000s/icecast.audio', stationuuid: 'mum-rc-911' },
+  { freq: 92.7, name: 'BIG FM Mumbai', url_resolved: 'https://a9newhits-a9media.radioca.st/stream', stationuuid: 'mum-big-927' },
+  { freq: 93.5, name: 'Red FM Mumbai', url_resolved: 'https://funasia.streamguys1.com/live9', stationuuid: 'mum-red-935' },
+  { freq: 94.3, name: 'Radio One Mumbai', url_resolved: 'https://strmreg.1.fm/bombaybeats_mobile_mp3', stationuuid: 'mum-ro-943' },
+  { freq: 98.3, name: 'Radio Mirchi Mumbai', url_resolved: 'https://eu8.fastcast4u.com/proxy/clyedupq/stream', stationuuid: 'mum-rm-983' },
+  { freq: 100.1, name: 'AIR FM Gold', url_resolved: 'https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio005/hlspbaudio00564kbps.m3u8', stationuuid: 'mum-gold-1001' },
+  { freq: 102.8, name: 'Vividh Bharati', url_resolved: 'https://air.pc.cdn.bitgravity.com/air/live/pbaudio001/playlist.m3u8', stationuuid: 'mum-vb-1028' },
+  { freq: 104.0, name: 'Fever FM Mumbai', url_resolved: 'https://a9oldhits-a9media.radioca.st/stream', stationuuid: 'mum-fever-1040' },
+  { freq: 104.8, name: 'Ishq FM Mumbai', url_resolved: 'https://drive.uber.radio/uber/bollywoodnow/icecast.audio', stationuuid: 'mum-ishq-1048' },
+  { freq: 107.1, name: 'AIR FM Rainbow', url_resolved: 'https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio002/hlspbaudio002_Auto.m3u8', stationuuid: 'mum-rainbow-1071' }
+];
+
+const NASHIK_STATIONS = [
+  { freq: 90.4, name: 'Radio Vishwas', url_resolved: 'https://puma.streemlion.com:4130/stream', stationuuid: 'nsk-rv-904' },
+  { freq: 98.3, name: 'Radio Mirchi Nashik', url_resolved: 'https://eu8.fastcast4u.com/proxy/clyedupq/stream', stationuuid: 'nsk-rm-983' },
+  { freq: 104.2, name: 'SMY FM Nashik', url_resolved: 'https://nl4.mystreaming.net/uber/bollywoodlove/icecast.audio', stationuuid: 'nsk-my-1042' }
+];
+
 function App() {
-  const [stations, setStations] = useState(INDIAN_STATIONS);
-  const [currentStation, setCurrentStation] = useState(INDIAN_STATIONS[3]); // Red FM 93.5 as default
+  const [currentCity, setCurrentCity] = useState('Detecting Location...');
+  const [stations, setStations] = useState(DEFAULT_STATIONS);
+  const [currentStation, setCurrentStation] = useState(DEFAULT_STATIONS[3]); // Red FM 93.5 as default
   
   const [frequency, setFrequency] = useState(93.5); // Start at 93.5 FM
   const [volume, setVolume] = useState(0.8);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMono, setIsMono] = useState(false);
-  const [isPowerOn, setIsPowerOn] = useState(true); // Power state
+  const [isPowerOn, setIsPowerOn] = useState(false); // Power state defaults to off
  
-  // Saved stations state - start empty
   const [savedStations, setSavedStations] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const audioRef = useRef(null);
+
+  // Geolocation logic
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+          const data = await res.json();
+          const city = data.address.city || data.address.town || data.address.village || data.address.county || "Unknown";
+          
+          if (city.toLowerCase().includes('mumbai') || city.toLowerCase().includes('bombay')) {
+            setCurrentCity('Mumbai');
+            setStations(MUMBAI_STATIONS);
+          } else if (city.toLowerCase().includes('nashik') || city.toLowerCase().includes('nasik')) {
+            setCurrentCity('Nashik');
+            setStations(NASHIK_STATIONS);
+          } else {
+            setCurrentCity(city);
+            setStations(DEFAULT_STATIONS);
+          }
+        } catch (err) {
+          console.error("Geolocation fetch failed:", err);
+          setCurrentCity('National');
+        }
+      }, (error) => {
+        console.warn("Geolocation denied or error:", error);
+        setCurrentCity('National');
+      });
+    } else {
+      setCurrentCity('National');
+    }
+  }, []);
   
   // Web Audio Context
   const audioCtxRef = useRef(null);
@@ -252,7 +304,23 @@ function App() {
     playClickSound();
     const nextPowerState = !isPowerOn;
     setIsPowerOn(nextPowerState);
-    if (!nextPowerState && isPlaying) {
+    
+    if (nextPowerState) {
+      // User interacted, we can initialize audio and play
+      initAudioContext();
+      if (audioCtxRef.current && audioCtxRef.current.state === 'suspended') {
+        audioCtxRef.current.resume();
+      }
+      setIsPlaying(true);
+      
+      const audio = audioRef.current;
+      if (currentStation && currentStation.url_resolved) {
+        audio.src = currentStation.url_resolved;
+        if (stationVolume > 0) {
+          audio.play().catch(e => console.log("Stream play failed:", e));
+        }
+      }
+    } else {
       setIsPlaying(false);
       const audio = audioRef.current;
       if (audio) audio.pause();
@@ -305,12 +373,12 @@ function App() {
 
   // Update current station state when closest station shifts
   useEffect(() => {
-    if (closestStation && isPlaying && isPowerOn) {
+    if (closestStation) {
       if (!currentStation || closestStation.stationuuid !== currentStation.stationuuid) {
         setCurrentStation(closestStation);
       }
     }
-  }, [closestStation, currentStation, isPlaying, isPowerOn]);
+  }, [closestStation, currentStation]);
 
   // Play / Pause toggle
   const togglePlay = () => {
@@ -548,6 +616,8 @@ function App() {
             <div className="screen-reflection"></div>
             
             <div className="screen-inner-layout">
+              <div className="lcd-city-badge">{currentCity}</div>
+              
               {/* Info Group Wrapper */}
               <div className="lcd-info-group">
                 {/* Frequency Readout Area */}
