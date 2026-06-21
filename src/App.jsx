@@ -663,7 +663,7 @@ function App() {
 
   // Determine active station name to display inside LCD Screen
   const activeDisplayName = useMemo(() => {
-    const saved = savedStations.find(s => Math.abs(s.freq - frequency) < 0.05);
+    const saved = savedStations.find(s => s && Math.abs(s.freq - frequency) < 0.05);
     if (saved) return saved.name;
     
     if (currentStation && Math.abs(currentStation.freq - frequency) < 0.15) {
@@ -675,7 +675,7 @@ function App() {
 
   // Find saved index (preset number)
   const savedIndex = useMemo(() => {
-    return savedStations.findIndex(s => Math.abs(s.freq - frequency) < 0.05);
+    return savedStations.findIndex(s => s && Math.abs(s.freq - frequency) < 0.05);
   }, [frequency, savedStations]);
 
   return (
