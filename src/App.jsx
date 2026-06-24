@@ -218,7 +218,8 @@ function App() {
           const { latitude, longitude } = position.coords;
           const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
           const data = await res.json();
-          const city = data.address.city || data.address.town || data.address.state || 'National';
+          // Prioritize state (province) over local city/town
+          const city = data.address.state || data.address.region || data.address.city || data.address.town || 'National';
           const countryCode = (data.address.country_code || '').toUpperCase();
           
           setGeoCity(city);
