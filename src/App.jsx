@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Capacitor, registerPlugin } from '@capacitor/core';
+import { Play, Pause, Power, SkipBack, SkipForward, Maximize, Minimize } from 'lucide-react';
+import { Analytics } from "@vercel/analytics/react";
+import { getClosestHubCity } from './utils/geo';
 import './App.css';
 
 const RadioScraper = registerPlugin('RadioScraper');
@@ -218,9 +221,9 @@ function App() {
           const { latitude, longitude } = position.coords;
           const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
           const data = await res.json();
-          // Prioritize state (province) over local city/town
-          const city = data.address.state || data.address.region || data.address.city || data.address.town || 'National';
+          const localName = data.address.state || data.address.region || data.address.city || data.address.town || 'National';
           const countryCode = (data.address.country_code || '').toUpperCase();
+          const city = getClosestHubCity(latitude, longitude, countryCode, localName);
           
           setGeoCity(city);
           setGeoCountryCode(countryCode);
