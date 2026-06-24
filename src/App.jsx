@@ -170,6 +170,8 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [selectedRegionId, setSelectedRegionId] = useState(null);
+  const [geoCity, setGeoCity] = useState(null);
+  const [geoCountryCode, setGeoCountryCode] = useState(null);
 
   const audioRef = useRef(null);
   const dragItem = useRef(null);
@@ -200,25 +202,38 @@ function App() {
     const savedRegionId = localStorage.getItem('regionCode');
     if (savedRegionId) {
       const region = REGIONS.find(r => r.id === savedRegionId) || REGIONS[0];
+      if (geoCountryCode === region.code && geoCity) {
+        setCurrentCity(geoCity);
+      } else {
+        setCurrentCity(region.name);
+      }
       fetchRegionalStations(region.code).then(setStations);
     } else {
-      // Simultaneously open custom modal and trigger system prompt
       setIsLocationModalOpen(true);
     }
 
-    if ("geolocation" in navigator) {
+    if ("geolocation" in navigator && !geoCity) {
       navigator.geolocation.getCurrentPosition(async (position) => {
         try {
           const { latitude, longitude } = position.coords;
           const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
           const data = await res.json();
           const city = data.address.city || data.address.town || data.address.state || 'National';
-          setCurrentCity(city);
+          const countryCode = (data.address.country_code || '').toUpperCase();
           
-          if (!savedRegionId) {
-            const countryCode = (data.address.country_code || '').toUpperCase();
+          setGeoCity(city);
+          setGeoCountryCode(countryCode);
+          
+          const activeRegionId = localStorage.getItem('regionCode');
+          if (activeRegionId) {
+            const activeRegion = REGIONS.find(r => r.id === activeRegionId) || REGIONS[0];
+            if (activeRegion.code === countryCode) {
+              setCurrentCity(city);
+            }
+          } else {
             let matchedRegion = REGIONS.find(r => r.code === countryCode) || REGIONS[0];
             localStorage.setItem('regionCode', matchedRegion.id);
+            setCurrentCity(city);
             setIsPlaying(true);
             const newStations = await fetchRegionalStations(matchedRegion.code);
             setStations(newStations);
@@ -226,22 +241,23 @@ function App() {
           }
         } catch (err) {
           console.error("Geolocation fetch failed:", err);
-          if (!savedRegionId) setCurrentCity('National');
+          if (!localStorage.getItem('regionCode')) setCurrentCity('National');
         }
       }, (error) => {
         console.warn("Geolocation denied or error:", error);
-        if (!savedRegionId) setCurrentCity('National');
+        if (!localStorage.getItem('regionCode')) setCurrentCity('National');
       });
     }
-  }, [isPowerOn]);
+  }, [isPowerOn, geoCity, geoCountryCode]);
 
   const handleRegionClick = async (region) => {
     if (selectedRegionId === region.id) {
       localStorage.setItem('regionCode', region.id);
       
-      // Do not overwrite currentCity with region.name! Let the geolocation keep the actual city on screen.
-      if (currentCity === 'Detecting Location...') {
-        setCurrentCity('National');
+      if (geoCountryCode === region.code && geoCity) {
+        setCurrentCity(geoCity);
+      } else {
+        setCurrentCity(region.name);
       }
 
       setIsPlaying(true);
