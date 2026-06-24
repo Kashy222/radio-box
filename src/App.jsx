@@ -1,44 +1,77 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { Capacitor, registerPlugin } from '@capacitor/core';
 import './App.css';
+
+const RadioScraper = registerPlugin('RadioScraper');
 
 const MIN_FREQ = 87.5;
 const MAX_FREQ = 108.0;
 
 const DEFAULT_STATIONS = [
   { freq: 91.1, name: 'Radio City', url_resolved: 'https://drive.uber.radio/uber/bollywood2000s/icecast.audio', stationuuid: 'ind-rc-911' },
-  { freq: 91.9, name: 'Radio One', url_resolved: 'https://strmreg.1.fm/bombaybeats_mobile_mp3', stationuuid: 'ind-ro-919' },
   { freq: 92.7, name: 'BIG FM', url_resolved: 'https://strm112.1.fm/bombaybeats_mobile_mp3', stationuuid: 'ind-big-927' },
   { freq: 93.5, name: 'Red FM', url_resolved: 'https://funasia.streamguys1.com/live9', stationuuid: 'ind-red-935' },
-  { freq: 94.3, name: 'Radio One Hits', url_resolved: 'https://strm112.1.fm/top40_mobile_mp3', stationuuid: 'ind-ro-943' },
-  { freq: 95.0, name: 'Radio City Hits', url_resolved: 'https://server.mixify.in/listen/new_hits/radio.mp3', stationuuid: 'ind-rc-950' },
+  { freq: 94.3, name: 'Radio One', url_resolved: 'https://strm112.1.fm/top40_mobile_mp3', stationuuid: 'ind-ro-943' },
   { freq: 98.3, name: 'Radio Mirchi', url_resolved: 'https://eu8.fastcast4u.com/proxy/clyedupq/stream', stationuuid: 'ind-rm-983' },
-  { freq: 100.1, name: 'AIR FM Gold', url_resolved: 'https://drive.uber.radio/uber/bollywoodnow/icecast.audio', stationuuid: 'ind-gold-1001' },
-  { freq: 101.4, name: 'AIR Akashvani', url_resolved: 'https://nl4.mystreaming.net/uber/bollywoodlove/icecast.audio', stationuuid: 'ind-air-1014' },
-  { freq: 102.8, name: 'Vividh Bharati', url_resolved: 'https://a9oldhits-a9media.radioca.st/stream', stationuuid: 'ind-vb-1028' },
-  { freq: 104.0, name: 'Fever FM', url_resolved: 'https://server.mixify.in/listen/old_hits/radio.mp3', stationuuid: 'ind-fever-1040' },
-  { freq: 104.2, name: 'MY FM', url_resolved: 'https://nl4.mystreaming.net/uber/bollywoodlove/icecast.audio', stationuuid: 'ind-my-1042' },
-  { freq: 104.8, name: 'Ishq FM', url_resolved: 'https://drive.uber.radio/uber/bollywoodnow/icecast.audio', stationuuid: 'ind-ishq-1048' },
-  { freq: 107.1, name: 'AIR FM Rainbow', url_resolved: 'https://drive.uber.radio/uber/bollywood2000s/icecast.audio', stationuuid: 'ind-rainbow-1071' }
+  { freq: 104.0, name: 'Fever FM', url_resolved: 'https://server.mixify.in/listen/old_hits/radio.mp3', stationuuid: 'ind-fever-1040' }
 ];
 
 const MUMBAI_STATIONS = [
-  { freq: 91.1, name: 'Radio City Mumbai', url_resolved: 'https://drive.uber.radio/uber/bollywood2000s/icecast.audio', stationuuid: 'mum-rc-911' },
-  { freq: 92.7, name: 'BIG FM Mumbai', url_resolved: 'https://strm112.1.fm/bombaybeats_mobile_mp3', stationuuid: 'mum-big-927' },
-  { freq: 93.5, name: 'Red FM Mumbai', url_resolved: 'https://funasia.streamguys1.com/live9', stationuuid: 'mum-red-935' },
-  { freq: 94.3, name: 'Radio One Mumbai', url_resolved: 'https://strm112.1.fm/top40_mobile_mp3', stationuuid: 'mum-ro-943' },
-  { freq: 98.3, name: 'Radio Mirchi Mumbai', url_resolved: 'https://eu8.fastcast4u.com/proxy/clyedupq/stream', stationuuid: 'mum-rm-983' },
-  { freq: 100.1, name: 'AIR FM Gold', url_resolved: 'https://drive.uber.radio/uber/bollywoodnow/icecast.audio', stationuuid: 'mum-gold-1001' },
-  { freq: 102.8, name: 'Vividh Bharati', url_resolved: 'https://a9oldhits-a9media.radioca.st/stream', stationuuid: 'mum-vb-1028' },
-  { freq: 104.0, name: 'Fever FM Mumbai', url_resolved: 'https://server.mixify.in/listen/old_hits/radio.mp3', stationuuid: 'mum-fever-1040' },
-  { freq: 104.8, name: 'Ishq FM Mumbai', url_resolved: 'https://drive.uber.radio/uber/bollywoodnow/icecast.audio', stationuuid: 'mum-ishq-1048' },
-  { freq: 107.1, name: 'AIR FM Rainbow', url_resolved: 'https://nl4.mystreaming.net/uber/bollywoodlove/icecast.audio', stationuuid: 'mum-rainbow-1071' }
+  { freq: 91.1, name: 'Radio City', scrape_url: 'https://www.radiocity.in/', url_resolved: 'https://drive.uber.radio/uber/bollywood2000s/icecast.audio', stationuuid: 'mum-rc-911' },
+  { freq: 91.9, name: 'Radio Nasha', scrape_url: 'https://radionasha.com/', url_resolved: 'https://strmreg.1.fm/bombaybeats_mobile_mp3', stationuuid: 'mum-nasha-919' },
+  { freq: 92.7, name: 'BIG FM', scrape_url: 'https://bigfmindia.com/', url_resolved: 'https://strm112.1.fm/bombaybeats_mobile_mp3', stationuuid: 'mum-big-927' },
+  { freq: 93.5, name: 'Red FM', scrape_url: 'https://www.redfmindia.in/', url_resolved: 'https://funasia.streamguys1.com/live9', stationuuid: 'mum-red-935' },
+  { freq: 94.3, name: 'Radio One', scrape_url: 'https://www.htsmartcast.com/radio-one/', url_resolved: 'https://strm112.1.fm/top40_mobile_mp3', stationuuid: 'mum-ro-943' },
+  { freq: 95.0, name: 'Hit 95 FM', scrape_url: 'https://www.hit95fm.com/', url_resolved: 'https://server.mixify.in/listen/new_hits/radio.mp3', stationuuid: 'mum-hit-950' },
+  { freq: 98.3, name: 'Radio Mirchi', scrape_url: 'https://mirchi.in/listen-live', url_resolved: 'https://eu8.fastcast4u.com/proxy/clyedupq/stream', stationuuid: 'mum-rm-983' },
+  { freq: 100.1, name: 'AIR FM Gold', scrape_url: 'https://newsonair.gov.in/', url_resolved: 'https://drive.uber.radio/uber/bollywoodnow/icecast.audio', stationuuid: 'mum-gold-1001' },
+  { freq: 101.4, name: 'AIR Akashvani', scrape_url: 'https://newsonair.gov.in/', url_resolved: 'https://nl4.mystreaming.net/uber/bollywoodlove/icecast.audio', stationuuid: 'mum-air-1014' },
+  { freq: 102.8, name: 'Vividh Bharati', scrape_url: 'https://newsonair.gov.in/', url_resolved: 'https://a9oldhits-a9media.radioca.st/stream', stationuuid: 'mum-vb-1028' },
+  { freq: 104.0, name: 'Fever FM', scrape_url: 'https://www.htsmartcast.com/fever-fm/', url_resolved: 'https://server.mixify.in/listen/old_hits/radio.mp3', stationuuid: 'mum-fever-1040' },
+  { freq: 104.2, name: 'Mirchi Love', scrape_url: 'https://mirchi.in/listen-live', url_resolved: 'https://nl4.mystreaming.net/uber/bollywoodlove/icecast.audio', stationuuid: 'mum-love-1042' },
+  { freq: 107.1, name: 'AIR FM Rainbow', scrape_url: 'https://newsonair.gov.in/', url_resolved: 'https://drive.uber.radio/uber/bollywood2000s/icecast.audio', stationuuid: 'mum-rainbow-1071' }
 ];
 
 const NASHIK_STATIONS = [
   { freq: 90.4, name: 'Radio Vishwas', url_resolved: 'https://puma.streemlion.com:4130/stream', stationuuid: 'nsk-rv-904' },
-  { freq: 98.3, name: 'Radio Mirchi Nashik', url_resolved: 'https://eu8.fastcast4u.com/proxy/clyedupq/stream', stationuuid: 'nsk-rm-983' },
-  { freq: 104.2, name: 'SMY FM Nashik', url_resolved: 'https://nl4.mystreaming.net/uber/bollywoodlove/icecast.audio', stationuuid: 'nsk-my-1042' }
+  { freq: 98.3, name: 'Radio Mirchi', url_resolved: 'https://eu8.fastcast4u.com/proxy/clyedupq/stream', stationuuid: 'nsk-rm-983' },
+  { freq: 104.2, name: 'SMY FM', url_resolved: 'https://nl4.mystreaming.net/uber/bollywoodlove/icecast.audio', stationuuid: 'nsk-my-1042' }
 ];
+
+const REGIONS = [
+  { id: 'IN', code: 'IN', name: 'India', flagUrl: '/images/India.svg' },
+  { id: 'US', code: 'US', name: 'USA', flagUrl: '/images/United States Of America.svg' },
+  { id: 'GB', code: 'GB', name: 'United Kingdom', flagUrl: '/images/United Kingdom.svg' },
+  { id: 'EU', code: 'DE', name: 'Europe', flagUrl: '/images/Eurpoean Union.svg' },
+  { id: 'AE', code: 'AE', name: 'MENA', flagUrl: '/images/MENA.svg' },
+  { id: 'AS', code: 'JP', name: 'Rest Asia', flagUrl: '/images/Rest Of Asia.svg' },
+  { id: 'LA', code: 'BR', name: 'Latin America', flagUrl: '/images/Latin America.svg' },
+  { id: 'AU', code: 'AU', name: 'Oceania', flagUrl: '/images/Oceania.svg' },
+];
+
+const fetchRegionalStations = async (countryCode) => {
+  try {
+    const res = await fetch(`https://de1.api.radio-browser.info/json/stations/bycountrycodeexact/${countryCode}?limit=25&order=votes&reverse=true&hidebroken=true`);
+    const data = await res.json();
+    if (data && data.length > 0) {
+      let currentFreq = 88.0;
+      const apiStations = data.map(st => {
+        const freq = parseFloat((currentFreq += 0.6).toFixed(1));
+        if (currentFreq > 107.0) currentFreq = 88.0;
+        return {
+          freq: freq,
+          name: st.name.substring(0, 20).trim(),
+          url_resolved: st.url_resolved,
+          stationuuid: st.stationuuid
+        };
+      });
+      return countryCode === 'IN' ? [...apiStations, ...MUMBAI_STATIONS] : apiStations;
+    }
+  } catch (err) {
+    console.error("Radio browser fetch failed:", err);
+  }
+  return countryCode === 'IN' ? MUMBAI_STATIONS : [];
+};
 
 const VolumeWedge = () => {
   const segments = [];
@@ -107,6 +140,7 @@ function App() {
   const [frequency, setFrequency] = useState(93.5); // Start at 93.5 FM
   const [volume, setVolume] = useState(0.8);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isScraping, setIsScraping] = useState(false);
   const [isBuffering, setIsBuffering] = useState(false); // Track if audio is currently buffering
   const [isMono, setIsMono] = useState(false);
   const [isPowerOn, setIsPowerOn] = useState(false); // Power state defaults to off
@@ -134,6 +168,8 @@ function App() {
     }
   }, [savedStations]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const [selectedRegionId, setSelectedRegionId] = useState(null);
 
   const audioRef = useRef(null);
   const dragItem = useRef(null);
@@ -156,36 +192,64 @@ function App() {
 
   // Geolocation logic
   useEffect(() => {
+    if (!isPowerOn) {
+      setIsLocationModalOpen(false);
+      return;
+    }
+
+    const savedRegionId = localStorage.getItem('regionCode');
+    if (savedRegionId) {
+      const region = REGIONS.find(r => r.id === savedRegionId) || REGIONS[0];
+      if (currentCity !== region.name) {
+        setCurrentCity(region.name);
+        fetchRegionalStations(region.code).then(setStations);
+      }
+      return;
+    }
+
+    // Simultaneously open custom modal and trigger system prompt
+    setIsLocationModalOpen(true);
+
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(async (position) => {
         try {
           const { latitude, longitude } = position.coords;
           const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
           const data = await res.json();
-          const city = data.address.city || data.address.town || data.address.village || data.address.county || "Unknown";
+          const countryCode = (data.address.country_code || '').toUpperCase();
           
-          if (city.toLowerCase().includes('mumbai') || city.toLowerCase().includes('bombay')) {
-            setCurrentCity('Mumbai');
-            setStations(MUMBAI_STATIONS);
-          } else if (city.toLowerCase().includes('nashik') || city.toLowerCase().includes('nasik')) {
-            setCurrentCity('Nashik');
-            setStations(NASHIK_STATIONS);
-          } else {
-            setCurrentCity(city);
-            setStations(DEFAULT_STATIONS);
+          let matchedRegion = REGIONS.find(r => r.code === countryCode);
+          if (!matchedRegion) {
+            matchedRegion = REGIONS[0]; // fallback
           }
+
+          localStorage.setItem('regionCode', matchedRegion.id);
+          setCurrentCity(matchedRegion.name);
+          setIsPlaying(true);
+          const newStations = await fetchRegionalStations(matchedRegion.code);
+          setStations(newStations);
+          setIsLocationModalOpen(false);
         } catch (err) {
           console.error("Geolocation fetch failed:", err);
-          setCurrentCity('National');
         }
       }, (error) => {
         console.warn("Geolocation denied or error:", error);
-        setCurrentCity('National');
       });
-    } else {
-      setCurrentCity('National');
     }
-  }, []);
+  }, [isPowerOn]);
+
+  const handleRegionClick = async (region) => {
+    if (selectedRegionId === region.id) {
+      localStorage.setItem('regionCode', region.id);
+      setCurrentCity(region.name);
+      setIsPlaying(true);
+      const newStations = await fetchRegionalStations(region.code);
+      setStations(newStations);
+      setIsLocationModalOpen(false);
+    } else {
+      setSelectedRegionId(region.id);
+    }
+  };
   
   // Web Audio Context
   const audioCtxRef = useRef(null);
@@ -367,14 +431,18 @@ function App() {
       if (audioCtxRef.current && audioCtxRef.current.state === 'suspended') {
         audioCtxRef.current.resume();
       }
-      setIsPlaying(true);
       
-      const audio = audioRef.current;
-      if (currentStation && currentStation.url_resolved) {
-        setIsBuffering(true);
-        audio.src = currentStation.url_resolved;
-        if (stationVolume > 0) {
-          audio.play().catch(e => console.log("Stream play failed:", e));
+      const savedRegionId = localStorage.getItem('regionCode');
+      if (savedRegionId) {
+        setIsPlaying(true);
+        
+        const audio = audioRef.current;
+        if (currentStation && currentStation.url_resolved) {
+          setIsBuffering(true);
+          audio.src = currentStation.url_resolved;
+          if (stationVolume > 0) {
+            audio.play().catch(e => console.log("Stream play failed:", e));
+          }
         }
       }
     } else {
@@ -450,15 +518,7 @@ function App() {
     setIsPlaying(newPlayingState);
 
     const audio = audioRef.current;
-    if (newPlayingState) {
-      if (currentStation && currentStation.url_resolved) {
-        setIsBuffering(true);
-        audio.src = currentStation.url_resolved;
-        if (stationVolume > 0) {
-          audio.play().catch(e => console.log("Stream play failed:", e));
-        }
-      }
-    } else {
+    if (!newPlayingState) {
       audio.pause();
     }
   };
@@ -489,9 +549,33 @@ function App() {
     const audio = audioRef.current;
     if (isPlaying && currentStation && currentStation.url_resolved && isPowerOn) {
       setIsBuffering(true);
-      audio.src = currentStation.url_resolved;
-      if (stationVolume > 0) {
-        audio.play().catch(e => console.log("Stream play transition failed:", e));
+      
+      const playAudio = (url) => {
+        audio.src = url;
+        if (stationVolume > 0) {
+          audio.play().catch(e => console.log("Stream play transition failed:", e));
+        }
+      };
+
+      if (Capacitor.isNativePlatform() && currentStation.scrape_url) {
+        setIsScraping(true);
+        audio.pause();
+        RadioScraper.sniffM3u8({ url: currentStation.scrape_url })
+          .then(result => {
+            setIsScraping(false);
+            if (result && result.streamUrl) {
+              playAudio(result.streamUrl);
+            } else {
+              playAudio(currentStation.url_resolved);
+            }
+          })
+          .catch(error => {
+            console.error("Scraper failed, falling back to static url", error);
+            setIsScraping(false);
+            playAudio(currentStation.url_resolved);
+          });
+      } else {
+        playAudio(currentStation.url_resolved);
       }
     }
   }, [currentStation, isPlaying, isPowerOn]);
@@ -811,10 +895,13 @@ function App() {
                   </div>
                 </div>
 
-                {/* Station Title */}
                 <div className="lcd-station-title-box">
                   <div className="lcd-station-title">
-                    {activeDisplayName !== "------" && isBuffering && isPlaying ? (
+                    {isScraping ? (
+                      <div className="calibrating-container scraping-blink">
+                        <span>SCRAPING STREAM...</span>
+                      </div>
+                    ) : activeDisplayName !== "------" && isBuffering && isPlaying ? (
                       <div className="calibrating-container">
                         <div className="sliding-squares-loader left">
                           <div className="square"></div>
@@ -927,6 +1014,39 @@ function App() {
                 </div>
               )}
             </div>
+
+            <div className={`saved-stations-overlay-screen ${isLocationModalOpen ? 'open' : 'closed'}`} style={{padding: '14px'}}>
+              <div className="overlay-header" style={{marginBottom: '4px'}}>
+                <span style={{marginRight: '2px', fontSize: '16px', lineHeight: '1', display: 'inline-flex', alignItems: 'center'}}>🌍</span>
+                <span>Select Your Region</span>
+              </div>
+              <div className="overlay-list-scroll" style={{display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gridTemplateRows: 'repeat(2, auto)', gap: '4px', alignContent: 'center', overflow: 'hidden'}}>
+                {REGIONS.map((region) => (
+                  <div 
+                    key={region.id}
+                    className={`saved-station-item-row ${selectedRegionId === region.id ? 'active' : ''}`}
+                    onClick={() => handleRegionClick(region)}
+                    style={{borderColor: selectedRegionId === region.id ? '#28a745' : undefined, alignItems: 'center', justifyContent: 'flex-start', paddingTop: '22%', display: 'flex', flexDirection: 'column', gap: '4%', borderRadius: '8px', margin: '0', aspectRatio: '119/166'}}
+                  >
+                    <div className="region-flag-container" style={{margin: '0', width: '67%', aspectRatio: '1/1', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                      {selectedRegionId === region.id ? (
+                        <div className="custom-check-sphere" style={{width: '100%', height: '100%'}}>
+                          <svg width="60%" height="60%" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                          </svg>
+                        </div>
+                      ) : (
+                        <img src={region.flagUrl} alt={region.name} className="region-flag-img" style={{width: '100%', height: '100%'}} />
+                      )}
+                    </div>
+                    
+                    <div className="location-region-name" style={{flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.55rem', color: '#a3a3a3', fontWeight: '300', textAlign: 'center', lineHeight: '1.1', width: '100%'}}>
+                      {selectedRegionId === region.id ? "Confirm" : region.name}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1005,7 +1125,9 @@ function App() {
                 <path d="M6 6h2v12H6zm3.5 6L18 6v12z" />
               </svg>
             </button>
+            
             <div className="pill-divider-line"></div>
+
             <button className="skip-btn next" onClick={handleNextStation} aria-label="Next Station">
               <svg viewBox="0 0 24 24" width="16" height="16">
                 <path d="M6 18V6l8.5 6zm10-12h2v12h-2z" />

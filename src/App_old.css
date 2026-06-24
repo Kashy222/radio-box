@@ -28,9 +28,6 @@
   justify-content: space-between;
   position: relative;
   box-sizing: border-box;
-  user-select: none;
-  -webkit-user-select: none;
-
 }
 
 /* Container to group header and screen and prevent distributed flex stretching */
@@ -53,27 +50,21 @@
   padding: 0 4px;
 }
 
-/* Flat wrapper style for the Nostalgia Logo */
-.nostalgia-logo-wrapper {
+/* Flat wrapper style for the Philips Logo */
+.philips-logo-wrapper {
   position: relative;
-  width: 120px;
+  width: 63px; /* Increased by 15% from 55px */
+  height: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: translateY(3px); /* Shift downwards to midline align with power button */
 }
 
-.nostalgia-wordmark-logo {
+.philips-wordmark-logo {
   display: block;
   width: 100%;
   height: auto;
-  opacity: 1; /* Restore full vibrancy */
-  /* Enhance the natural copper colors, add brushed texture, and add a subtle raised effect */
-  filter: 
-    url(#brushed-metal)
-    contrast(1.1) 
-    saturate(1.1)
-    drop-shadow(0px 1px 1.5px rgba(0, 0, 0, 0.5));
+  opacity: 0.95;
 }
 
 /* Recessed pocket container for cylindrical power switch pill */
@@ -318,54 +309,9 @@
   opacity: 0.85;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.15);
   border: 1px dotted rgba(28, 21, 16, 0.35);
-  padding: 2px 4px 2px 6px; /* Offset the built-in font tracking on the right */
+  padding: 1px 4px;
   border-radius: 3px;
   text-transform: uppercase;
-  max-width: 82px;
-  width: max-content;
-  white-space: nowrap;
-  overflow: hidden;
-  display: block;
-  line-height: 12px;
-  height: 16px;
-  box-sizing: border-box;
-}
-
-.lcd-city-badge span {
-  display: inline-block;
-  animation: lcdScroll 12s linear infinite;
-}
-
-@keyframes lcdScroll {
-  0%, 15% {
-    transform: translateX(0);
-  }
-  45%, 55% {
-    transform: translateX(var(--scroll-amount, 0px));
-  }
-  85%, 100% {
-    transform: translateX(0);
-  }
-}
-
-/* Mute Badge on LCD Screen */
-.lcd-mute-badge {
-  font-family: 'Doto', monospace;
-  font-size: 0.65rem;
-  font-weight: 800;
-  color: #1c1510;
-  position: absolute;
-  right: 16px;
-  top: 16px;
-  opacity: 0.85;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.15));
-  line-height: 1;
-  height: 16px;
-  box-sizing: border-box;
 }
 
 /* Preset Badge on LCD Screen */
@@ -375,20 +321,13 @@
   font-weight: 800;
   color: #1c1510;
   position: absolute;
-  left: 50%;
+  right: 16px;
   top: 16px;
-  transform: translateX(-50%);
   opacity: 0.85;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.15);
   border: 1px dotted rgba(28, 21, 16, 0.35);
-  padding: 2px 4px 2px 6px;
+  padding: 1px 4px;
   border-radius: 3px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-  height: 16px;
-  box-sizing: border-box;
 }
 
 /* Bottom tuner container inside the screen (no background or border) */
@@ -423,10 +362,6 @@
   text-shadow: 
     0 1px 1px rgba(255, 255, 255, 0.15),
     0 0 1.5px rgba(0, 0, 0, 0.35);
-}
-
-.lcd-dot {
-  font-size: 0.75em; /* Reduced by 25% */
 }
 
 .lcd-unit {
@@ -474,7 +409,7 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  padding: 12px 16px 28px 16px;
+  padding: 12px;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -488,38 +423,43 @@
 
 .overlay-header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
-  border-bottom: none;
-  padding-bottom: 8px;
-  margin-bottom: 8px;
-}
-
-.overlay-back-btn {
-  background: #f18225;
-  border: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 6px;
+  margin-bottom: 6px;
 }
 
 .overlay-header span {
   color: #ffffff;
-  font-size: 0.8rem;
-  font-weight: 500;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.overlay-close-btn {
+  background: transparent;
+  border: none;
+  color: #a3a3a3;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
 }
 
 .overlay-list-scroll {
   flex: 1;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   gap: 6px;
-  align-content: start;
+}
+
+/* Custom Scrollbar for list */
+.overlay-list-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.overlay-list-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
 }
 
 .empty-saved-msg {
@@ -531,184 +471,86 @@
 
 .saved-station-item-row {
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
-  align-items: stretch;
-  background: #1f1f1f;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 8px;
-  padding: 6px;
-  cursor: grab;
-  transition: background-color 0.15s ease;
-  aspect-ratio: 161/167;
-  position: relative;
-  text-align: left;
-  box-sizing: border-box;
-  min-width: 0;
-}
-
-.saved-station-item-row.empty {
-  background: #333333;
-  border: 1px dashed rgba(255, 255, 255, 0.15);
+  padding: 8px 12px;
   cursor: pointer;
-}
-
-.saved-station-item-row:active {
-  cursor: grabbing;
+  transition: background-color 0.15s ease;
 }
 
 .saved-station-item-row:hover {
-  background: #2a2a2a;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .saved-station-item-row.active {
   border-color: #f18225;
+  background: rgba(241, 130, 37, 0.12);
 }
 
-.saved-item-top {
+.saved-item-info {
   display: flex;
-  width: 100%;
-}
-
-.saved-item-preset-id {
-  color: #d97706;
-  font-size: 0.55rem;
-  font-weight: 500;
-  margin: 0;
-  line-height: 1;
-}
-
-.saved-station-item-row.empty .saved-item-preset-id {
-  color: rgba(217, 119, 6, 0.4);
-}
-
-.saved-item-mid {
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  gap: 4px;
-  width: 100%;
-  flex-wrap: wrap;
-  margin-top: auto;
-  margin-bottom: 2px;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .saved-item-freq {
   color: #ffffff;
-  font-size: 1.05rem;
-  font-weight: 600;
-  line-height: 1.1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
+  font-size: 0.85rem;
+  font-weight: 700;
 }
 
 .saved-station-item-row.active .saved-item-freq {
-  color: #ffffff;
-}
-
-.saved-item-bottom {
-  display: flex;
-  width: 100%;
+  color: #f18225;
 }
 
 .saved-item-name {
   color: #9ca3af;
-  font-size: 0.5rem;
-  font-weight: 400;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 100%;
+  font-size: 0.7rem;
+  font-weight: 500;
 }
 
 .saved-item-delete-btn {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  background: #ef4444;
+  background: transparent;
   border: none;
-  color: #111;
-  border-radius: 4px;
-  width: 18px;
-  height: 18px;
+  color: #9ca3af;
+  font-size: 0.95rem;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  z-index: 2;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  padding: 4px;
 }
 
 .saved-item-delete-btn:hover {
-  background: #dc2626;
+  color: #ef4444;
 }
 
-.delete-confirm-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.75);
+/* =========================================
+   SECTION 2: Horizontal Tuning Scale & Slider
+   ========================================= */
+/* =========================================
+   SECTION 2: Horizontal Tuning Slider
+   ========================================= */
+.scale-and-slider-controls {
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+  box-sizing: border-box;
+}
+
+.scale-and-slider-controls.off {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* Horizontal alignment of the slider track flanked by the two step buttons */
+.tuning-slider-row-layout {
   display: flex;
   align-items: center;
-  justify-content: center;
-  z-index: 100;
-  border-radius: 20px; /* matches overlay screen inner rounding */
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
 }
-
-.delete-confirm-popup {
-  background: #2a2a2a;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 20px;
-  border-radius: 12px;
-  width: 80%;
-  max-width: 240px;
-  text-align: center;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-}
-
-.delete-confirm-popup p {
-  color: #ffffff;
-  font-size: 0.95rem;
-  margin: 0 0 20px 0;
-}
-
-.delete-confirm-actions {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-}
-
-.delete-confirm-cancel {
-  flex: 1;
-  padding: 10px;
-  background: #444444;
-  color: #cccccc;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 0.85rem;
-}
-
-.delete-confirm-ok {
-  flex: 1;
-  padding: 10px;
-  background: #ef4444;
-  color: #ffffff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 0.85rem;
-}
-
-.delete-confirm-cancel:hover { background: #555555; }
-.delete-confirm-ok:hover { background: #dc2626; }
 
 .ruler-ticks-viewport {
   display: flex;
@@ -782,7 +624,100 @@
   z-index: 5;
 }
 
+/* Dark, rounded-square step tuning buttons flanking the scale */
+.tuning-step-arrow-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #2b2c31 0%, #17181c 100%);
+  border: 1px solid #131416;
+  box-shadow: 
+    0 1.5px 3px rgba(0, 0, 0, 0.45),
+    inset 0 1px 1px rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
 
+.tuning-step-arrow-btn:active {
+  background: linear-gradient(180deg, #17181c 0%, #0d0e10 100%);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.tuning-step-arrow-btn svg {
+  fill: #8e9196;
+}
+
+.tuning-step-arrow-btn:active svg {
+  fill: #ffffff;
+}
+
+/* Recessed Horizontal Slider Track */
+.horizontal-tuning-slider-wrapper {
+  position: relative;
+  height: 30px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Invisible Vertical volume touch zone */
+.vertical-volume-touch-zone {
+  position: absolute;
+  left: 0;
+  top: -12px;
+  width: 32px;
+  height: 54px;
+  z-index: 8;
+  cursor: ns-resize;
+}
+
+.horizontal-tuning-slider-track {
+  width: 100%;
+  height: 10px;
+  background: #111214;
+  border-radius: 5px;
+  border: 1px solid #232427;
+  box-shadow: 
+    inset 0 2.5px 3px rgba(0, 0, 0, 0.95),
+    0 1px 1px rgba(255, 255, 255, 0.05);
+  position: relative;
+  cursor: pointer;
+}
+
+/* Pentagon bullet handle pointer */
+.bullet-slider-thumb-handle {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 28px;
+  background: linear-gradient(180deg, #ffffff 0%, #d8dadf 40%, #a1a3a8 100%);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 100%, 0% 100%, 0% 25%);
+  box-shadow: 
+    0 2px 5px rgba(0, 0, 0, 0.4),
+    inset 0 1px 1px #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 6;
+  cursor: grab;
+}
+
+.bullet-slider-thumb-handle:active {
+  cursor: grabbing;
+}
+
+.bullet-handle-center-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background-color: #3b3d42;
+  margin-top: 6px;
+}
 
 /* =========================================
    SECTION 3: Bottom Action Footer Bar
@@ -849,9 +784,8 @@
 .footer-centered-pill {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 24px;
-  flex: 0 0 130px;
+  justify-content: space-between;
+  flex: 1;
   height: 36px;
   background: linear-gradient(180deg, #202124 0%, #0c0d0f 100%);
   border: 1px solid #101113;
@@ -859,7 +793,7 @@
   box-shadow: 
     inset 0 1.5px 2px rgba(0, 0, 0, 0.9),
     0 1px 1px rgba(255, 255, 255, 0.03);
-  padding: 0;
+  padding: 0 14px;
   box-sizing: border-box;
   margin: 0 4px;
   transition: opacity 0.4s ease;
@@ -894,195 +828,4 @@
   height: 18px;
   background-color: #111214;
   box-shadow: 1px 0 0 rgba(255, 255, 255, 0.05);
-}
-
-/* =========================================
-   SECTION 2: Rotary Tuning Knob
-   ========================================= */
-.rotary-knobs-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 0 10px 30px; /* Nudge right to perfectly balance the visual mass */
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.volume-knob-wrapper {
-  transform: scale(0.6);
-  transform-origin: center;
-  margin-left: -24px; /* Move left by 8px */
-}
-
-.volume-knob-wrapper .tuning-knob-label {
-  transform: translateX(-50%) scale(1.6666);
-  bottom: -5px; /* Bring the VOL label closer to its knob */
-}
-
-.rotary-tuning-knob-container {
-  position: relative;
-  width: 160px;
-  height: 160px;
-  flex-shrink: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* 270 degree outer track ring */
-.outer-ring-ticks {
-  position: absolute;
-  width: 144px;
-  height: 144px;
-  border-radius: 50%;
-}
-
-.outer-ring-ticks::before {
-  content: '';
-  position: absolute;
-  top: 4px; left: 4px; right: 4px; bottom: 4px;
-  border-radius: 50%;
-  border: 3px solid transparent;
-  border-top-color: #3b3d42;
-  border-left-color: #3b3d42;
-  border-right-color: #3b3d42;
-  box-sizing: border-box;
-}
-
-.tuning-knob-label {
-  position: absolute;
-  bottom: 0px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: 'Doto', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 2px;
-  color: #55585d;
-  font-weight: 600;
-}
-
-/* Tick marks */
-.outer-ring-ticks .tick {
-  position: absolute;
-  width: 3px;
-  height: 14px;
-  background-color: #55585d;
-  border-radius: 1.5px;
-  top: 0px;
-  left: calc(50% - 1.5px);
-  transform-origin: 1.5px 72px; /* 144/2 = 72px */
-}
-
-/* 5 ticks from -135deg to 135deg */
-.outer-ring-ticks .tick-1 { transform: rotate(-135deg); }
-.outer-ring-ticks .tick-2 { transform: rotate(-67.5deg); }
-.outer-ring-ticks .tick-3 { transform: rotate(0deg); }
-.outer-ring-ticks .tick-4 { transform: rotate(67.5deg); }
-.outer-ring-ticks .tick-5 { transform: rotate(135deg); }
-
-/* Sub-Tick marks */
-.outer-ring-ticks .sub-tick {
-  position: absolute;
-  width: 2px;
-  height: 8px;
-  background-color: rgba(85, 88, 93, 0.45); /* Fainter and less prominent */
-  border-radius: 1px;
-  top: 3px;
-  left: calc(50% - 1px);
-  transform-origin: 1px 69px; /* 144/2 - 3 = 69px */
-}
-
-/* 8 sub-ticks */
-.outer-ring-ticks .sub-1 { transform: rotate(-112.5deg); }
-.outer-ring-ticks .sub-2 { transform: rotate(-90deg); }
-.outer-ring-ticks .sub-3 { transform: rotate(-45deg); }
-.outer-ring-ticks .sub-4 { transform: rotate(-22.5deg); }
-.outer-ring-ticks .sub-5 { transform: rotate(22.5deg); }
-.outer-ring-ticks .sub-6 { transform: rotate(45deg); }
-.outer-ring-ticks .sub-7 { transform: rotate(90deg); }
-.outer-ring-ticks .sub-8 { transform: rotate(112.5deg); }
-
-.tuning-knob-base {
-  position: relative;
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #383b40 0%, #222427 100%);
-  border: 1px solid #1a1c1e;
-  box-shadow: 
-    0 12px 18px rgba(0, 0, 0, 0.6),      /* Drop shadow */
-    0 4px 6px rgba(0, 0, 0, 0.4),       /* Tight drop shadow */
-    inset 0 2px 2px rgba(255, 255, 255, 0.1), /* Top highlight inside */
-    inset 0 -2px 4px rgba(0, 0, 0, 0.3),      /* Bottom shadow inside */
-    0 0 0 5px #26282b; /* Thin dark outer lip */
-  cursor: grab;
-  z-index: 5;
-  touch-action: none; /* Prevents mobile scrolling when dragging the knob */
-}
-
-.tuning-knob-base:active {
-  cursor: grabbing;
-}
-
-.knob-indicator-notch {
-  position: absolute;
-  top: 10px;
-  left: calc(50% - 2.5px);
-  width: 5px;
-  height: 18px;
-  background-color: #121315;
-  border-radius: 2.5px;
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.8), 0 1px 0 rgba(255,255,255,0.05);
-  transform-origin: 2.5px 45px; /* Center of the knob base (110x110) */
-  transition: background-color 0.4s ease, box-shadow 0.4s ease;
-}
-
-.volume-indicator-triangle {
-  position: absolute;
-  top: 8px;
-  left: calc(50% - 5.5px);
-  width: 11px;
-  height: 9px;
-  transform-origin: 5.5px 47px; /* 55 - 8 = 47px */
-  filter: drop-shadow(0 1px 0 rgba(255,255,255,0.15));
-}
-
-.rotary-knobs-section.on .knob-indicator-notch {
-  background-color: #ff8c00;
-  box-shadow: 
-    inset 0 1px 2px rgba(0,0,0,0.4), 
-    0 1px 0 rgba(255,255,255,0.05),
-    0 0 8px rgba(255, 140, 0, 0.4);
-}
-
-.region-flag-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 12px;
-}
-
-.region-flag-img {
-  width: 56px;
-  height: 56px;
-}
-
-.custom-check-sphere {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #28a745;
-}
-
-.location-region-name {
-  font-weight: 400;
-  color: #999999;
-  font-size: 0.95rem;
-}
-
-.location-region-card.active .location-region-name {
-  color: #e0e0e0;
 }
