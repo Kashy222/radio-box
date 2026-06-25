@@ -236,13 +236,18 @@ function App() {
               setCurrentCity(city);
             }
           } else {
-            let matchedRegion = REGIONS.find(r => r.code === countryCode) || REGIONS[0];
+            let exactMatch = REGIONS.find(r => r.code === countryCode);
+            let matchedRegion = exactMatch || REGIONS[0];
             localStorage.setItem('regionCode', matchedRegion.id);
             setCurrentCity(city);
             setIsPlaying(true);
             const newStations = await fetchRegionalStations(matchedRegion.code);
             setStations(newStations);
-            setIsLocationModalOpen(false);
+            
+            // Only auto-close the modal if their country is natively supported
+            if (exactMatch) {
+              setIsLocationModalOpen(false);
+            }
           }
         } catch (err) {
           console.error("Geolocation fetch failed:", err);
