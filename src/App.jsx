@@ -219,10 +219,11 @@ function App() {
       navigator.geolocation.getCurrentPosition(async (position) => {
         try {
           const { latitude, longitude } = position.coords;
-          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+          // Use BigDataCloud for more reliable free reverse geocoding without strict rate-limits
+          const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
           const data = await res.json();
-          const localName = data.address.state || data.address.region || data.address.city || data.address.town || 'National';
-          const countryCode = (data.address.country_code || '').toUpperCase();
+          const localName = data.principalSubdivision || data.city || data.locality || 'National';
+          const countryCode = (data.countryCode || '').toUpperCase();
           const city = getClosestHubCity(latitude, longitude, countryCode, localName);
           
           setGeoCity(city);
