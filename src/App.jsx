@@ -12,33 +12,38 @@ const MAX_FREQ = 108.0;
 
 const DEFAULT_STATIONS = [
   { freq: 91.1, name: 'Radio City', url_resolved: 'https://drive.uber.radio/uber/bollywood2000s/icecast.audio', stationuuid: 'ind-rc-911' },
-  { freq: 92.7, name: 'BIG FM', url_resolved: 'https://strm112.1.fm/bombaybeats_mobile_mp3', stationuuid: 'ind-big-927' },
+  { freq: 91.9, name: 'Radio One', url_resolved: 'https://strmreg.1.fm/bombaybeats_mobile_mp3', stationuuid: 'ind-ro-919' },
+  { freq: 92.7, name: 'BIG FM', url_resolved: 'https://a9newhits-a9media.radioca.st/stream', stationuuid: 'ind-big-927' },
   { freq: 93.5, name: 'Red FM', url_resolved: 'https://funasia.streamguys1.com/live9', stationuuid: 'ind-red-935' },
-  { freq: 94.3, name: 'Radio One', url_resolved: 'https://drive.uber.radio/uber/bollywoodnow/icecast.audio', stationuuid: 'ind-ro-943' },
+  { freq: 94.3, name: 'Radio One Hits', url_resolved: 'https://strmreg.1.fm/bombaybeats_mobile_mp3', stationuuid: 'ind-ro-943' },
+  { freq: 95.0, name: 'Radio City Hits', url_resolved: 'https://server.mixify.in/listen/new_hits/radio.mp3', stationuuid: 'ind-rc-950' },
   { freq: 98.3, name: 'Radio Mirchi', url_resolved: 'https://eu8.fastcast4u.com/proxy/clyedupq/stream', stationuuid: 'ind-rm-983' },
-  { freq: 104.0, name: 'Fever FM', url_resolved: 'https://nl4.mystreaming.net/uber/bollywoodlove/icecast.audio', stationuuid: 'ind-fever-1040' }
+  { freq: 100.1, name: 'AIR FM Gold', url_resolved: 'https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio005/hlspbaudio00564kbps.m3u8', stationuuid: 'ind-gold-1001' },
+  { freq: 101.4, name: 'AIR Akashvani', url_resolved: 'https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio002/hlspbaudio002_Auto.m3u8', stationuuid: 'ind-air-1014' },
+  { freq: 102.8, name: 'Vividh Bharati', url_resolved: 'https://air.pc.cdn.bitgravity.com/air/live/pbaudio001/playlist.m3u8', stationuuid: 'ind-vb-1028' },
+  { freq: 104.0, name: 'Fever FM', url_resolved: 'https://a9oldhits-a9media.radioca.st/stream', stationuuid: 'ind-fever-1040' },
+  { freq: 104.2, name: 'MY FM', url_resolved: 'https://nl4.mystreaming.net/uber/bollywoodlove/icecast.audio', stationuuid: 'ind-my-1042' },
+  { freq: 104.8, name: 'Ishq FM', url_resolved: 'https://drive.uber.radio/uber/bollywoodnow/icecast.audio', stationuuid: 'ind-ishq-1048' },
+  { freq: 107.1, name: 'AIR FM Rainbow', url_resolved: 'https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio002/hlspbaudio002_Auto.m3u8', stationuuid: 'ind-rainbow-1071' }
 ];
 
 const MUMBAI_STATIONS = [
-  { freq: 91.1, name: 'Radio City', scrape_url: 'https://www.radiocity.in/', url_resolved: 'https://drive.uber.radio/uber/bollywood2000s/icecast.audio', stationuuid: 'mum-rc-911' },
-  { freq: 91.9, name: 'Radio Nasha', scrape_url: 'https://radionasha.com/', url_resolved: 'https://strmreg.1.fm/bombaybeats_mobile_mp3', stationuuid: 'mum-nasha-919' },
-  { freq: 92.7, name: 'BIG FM', scrape_url: 'https://bigfmindia.com/', url_resolved: 'https://strm112.1.fm/bombaybeats_mobile_mp3', stationuuid: 'mum-big-927' },
-  { freq: 93.5, name: 'Red FM', scrape_url: 'https://www.redfmindia.in/', url_resolved: 'https://funasia.streamguys1.com/live9', stationuuid: 'mum-red-935' },
-  { freq: 94.3, name: 'Radio One', scrape_url: 'https://www.htsmartcast.com/radio-one/', url_resolved: 'https://drive.uber.radio/uber/bollywoodnow/icecast.audio', stationuuid: 'mum-ro-943' },
-  { freq: 95.0, name: 'Hit 95 FM', scrape_url: 'https://www.hit95fm.com/', url_resolved: 'https://drive.uber.radio/uber/bollywood2000s/icecast.audio', stationuuid: 'mum-hit-950' },
-  { freq: 98.3, name: 'Radio Mirchi', scrape_url: 'https://mirchi.in/listen-live', url_resolved: 'https://eu8.fastcast4u.com/proxy/clyedupq/stream', stationuuid: 'mum-rm-983' },
-  { freq: 100.1, name: 'AIR FM Gold', scrape_url: 'https://newsonair.gov.in/', url_resolved: 'https://drive.uber.radio/uber/bollywoodnow/icecast.audio', stationuuid: 'mum-gold-1001' },
-  { freq: 101.4, name: 'AIR Akashvani', scrape_url: 'https://newsonair.gov.in/', url_resolved: 'https://nl4.mystreaming.net/uber/bollywoodlove/icecast.audio', stationuuid: 'mum-air-1014' },
-  { freq: 102.8, name: 'Vividh Bharati', scrape_url: 'https://newsonair.gov.in/', url_resolved: 'https://a9oldhits-a9media.radioca.st/stream', stationuuid: 'mum-vb-1028' },
-  { freq: 104.0, name: 'Fever FM', scrape_url: 'https://www.htsmartcast.com/fever-fm/', url_resolved: 'https://eu8.fastcast4u.com/proxy/clyedupq/stream', stationuuid: 'mum-fever-1040' },
-  { freq: 104.2, name: 'Mirchi Love', scrape_url: 'https://mirchi.in/listen-live', url_resolved: 'https://nl4.mystreaming.net/uber/bollywoodlove/icecast.audio', stationuuid: 'mum-love-1042' },
-  { freq: 107.1, name: 'AIR FM Rainbow', scrape_url: 'https://newsonair.gov.in/', url_resolved: 'https://drive.uber.radio/uber/bollywood2000s/icecast.audio', stationuuid: 'mum-rainbow-1071' }
+  { freq: 91.1, name: 'Radio City Mumbai', url_resolved: 'https://drive.uber.radio/uber/bollywood2000s/icecast.audio', stationuuid: 'mum-rc-911' },
+  { freq: 92.7, name: 'BIG FM Mumbai', url_resolved: 'https://a9newhits-a9media.radioca.st/stream', stationuuid: 'mum-big-927' },
+  { freq: 93.5, name: 'Red FM Mumbai', url_resolved: 'https://funasia.streamguys1.com/live9', stationuuid: 'mum-red-935' },
+  { freq: 94.3, name: 'Radio One Mumbai', url_resolved: 'https://strmreg.1.fm/bombaybeats_mobile_mp3', stationuuid: 'mum-ro-943' },
+  { freq: 98.3, name: 'Radio Mirchi Mumbai', url_resolved: 'https://eu8.fastcast4u.com/proxy/clyedupq/stream', stationuuid: 'mum-rm-983' },
+  { freq: 100.1, name: 'AIR FM Gold', url_resolved: 'https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio005/hlspbaudio00564kbps.m3u8', stationuuid: 'mum-gold-1001' },
+  { freq: 102.8, name: 'Vividh Bharati', url_resolved: 'https://air.pc.cdn.bitgravity.com/air/live/pbaudio001/playlist.m3u8', stationuuid: 'mum-vb-1028' },
+  { freq: 104.0, name: 'Fever FM Mumbai', url_resolved: 'https://a9oldhits-a9media.radioca.st/stream', stationuuid: 'mum-fever-1040' },
+  { freq: 104.8, name: 'Ishq FM Mumbai', url_resolved: 'https://drive.uber.radio/uber/bollywoodnow/icecast.audio', stationuuid: 'mum-ishq-1048' },
+  { freq: 107.1, name: 'AIR FM Rainbow', url_resolved: 'https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio002/hlspbaudio002_Auto.m3u8', stationuuid: 'mum-rainbow-1071' }
 ];
 
 const NASHIK_STATIONS = [
   { freq: 90.4, name: 'Radio Vishwas', url_resolved: 'https://puma.streemlion.com:4130/stream', stationuuid: 'nsk-rv-904' },
-  { freq: 98.3, name: 'Radio Mirchi', url_resolved: 'https://eu8.fastcast4u.com/proxy/clyedupq/stream', stationuuid: 'nsk-rm-983' },
-  { freq: 104.2, name: 'SMY FM', url_resolved: 'https://nl4.mystreaming.net/uber/bollywoodlove/icecast.audio', stationuuid: 'nsk-my-1042' }
+  { freq: 98.3, name: 'Radio Mirchi Nashik', url_resolved: 'https://eu8.fastcast4u.com/proxy/clyedupq/stream', stationuuid: 'nsk-rm-983' },
+  { freq: 104.2, name: 'SMY FM Nashik', url_resolved: 'https://nl4.mystreaming.net/uber/bollywoodlove/icecast.audio', stationuuid: 'nsk-my-1042' }
 ];
 
 const REGIONS = [
