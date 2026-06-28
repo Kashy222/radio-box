@@ -1094,3 +1094,82 @@
 .location-region-card.active .location-region-name {
   color: #e0e0e0;
 }
+
+/* NEW LCD ANIMATIONS */
+
+/* Power Off Collapse */
+.lcd-power-off-collapse {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+.collapse-dot {
+  width: 100%;
+  height: 10px;
+  background-color: #1c1510;
+  animation: crtCollapse 0.4s forwards;
+}
+@keyframes crtCollapse {
+  0% { height: 10px; width: 100%; opacity: 1; }
+  50% { height: 2px; width: 100%; opacity: 1; }
+  100% { height: 2px; width: 0%; opacity: 0; }
+}
+
+/* Volume State */
+.lcd-volume-state {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.lcd-vol-text {
+  font-size: 14px;
+  font-weight: bold;
+}
+.lcd-vol-grid {
+  display: flex;
+  gap: 2px;
+}
+.vol-dot {
+  width: 4px;
+  height: 12px;
+  background-color: #1c1510;
+  border-radius: 1px;
+}
+.vol-dot.off { opacity: 0.1; }
+.vol-dot.on { opacity: 1; }
+
+/* Signal Lost & Tuning Grids */
+.lcd-signal-lost {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.signal-lost-text {
+  font-size: 14px;
+  font-weight: bold;
+}
+.signal-lost-grid, .tuning-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.signal-row, .tuning-row {
+  display: flex;
+  gap: 2px;
+}
+.signal-dot, .tuning-dot {
+  width: 4px;
+  height: 4px;
+  background-color: #1c1510;
+  border-radius: 1px;
+  opacity: 0.15;
+}
+.cross-active {
+  animation: signalSweep 1s infinite linear;
+}
+@keyframes signalSweep {
+  0%, 100% { opacity: 0.15; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.1); }
+}

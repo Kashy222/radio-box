@@ -160,6 +160,12 @@ function App() {
   const [isScraping, setIsScraping] = useState(false);
   const [isBuffering, setIsBuffering] = useState(false); // Track if audio is currently buffering
   const [scrambleOffset, setScrambleOffset] = useState(0);
+  const [isSignalLost, setIsSignalLost] = useState(false);
+  const [isVolumeChanging, setIsVolumeChanging] = useState(false);
+  const [isPoweringOff, setIsPoweringOff] = useState(false);
+  const volumeTimeoutRef = useRef(null);
+  const nextStationRef = useRef(null);
+  
   const [isMono, setIsMono] = useState(false);
   const [isPowerOn, setIsPowerOn] = useState(false); // Power state defaults to off
   const [savedStations, setSavedStations] = useState(() => {
@@ -190,6 +196,31 @@ function App() {
   const [selectedRegionId, setSelectedRegionId] = useState(null);
   const [geoCity, setGeoCity] = useState(null);
   const [geoCountryCode, setGeoCountryCode] = useState(null);
+
+  useEffect(() => {
+    nextStationRef.current = handleNextStation;
+  });
+
+  // Auto skip logic if buffering fails
+  useEffect(() => {
+    let timeoutId;
+    let signalLostTimeoutId;
+    if (isBuffering && isPlaying && isPowerOn) {
+      timeoutId = setTimeout(() => {
+        setIsSignalLost(true);
+        signalLostTimeoutId = setTimeout(() => {
+          setIsSignalLost(false);
+          if (nextStationRef.current) nextStationRef.current();
+        }, 1500);
+      }, 4500); // 4.5s wait
+    } else {
+      setIsSignalLost(false);
+    }
+    return () => {
+      clearTimeout(timeoutId);
+      clearTimeout(signalLostTimeoutId);
+    };
+  }, [isBuffering, isPlaying, isPowerOn]);
 
   // Scramble frequency effect when buffering
   useEffect(() => {
@@ -655,6 +686,18 @@ function App() {
   }, [stationVolume, currentStation, isPlaying, isPowerOn]);
 
   // Bottom Skip Prev and Next (Skips directly to previous/next saved/known station)
+  const handlePowerToggle = () => {
+    if (isPowerOn) {
+      setIsPoweringOff(true);
+      setTimeout(() => {
+        setIsPoweringOff(false);
+        setIsPowerOn(false);
+      }, 500);
+    } else {
+      setIsPowerOn(true);
+    }
+  };
+
   const handlePrevStation = () => {
     if (!isPowerOn || stationFrequencies.length === 0) return;
     const currentIndex = stationFrequencies.findIndex(s => s.stationuuid === currentStation?.stationuuid);
@@ -714,6 +757,9 @@ function App() {
     
     const percent = (newAngle + 90) / 180;
     setVolume(percent);
+    setIsVolumeChanging(true);
+    if (volumeTimeoutRef.current) clearTimeout(volumeTimeoutRef.current);
+    volumeTimeoutRef.current = setTimeout(() => setIsVolumeChanging(false), 2000);
     initAudioContext();
   };
 
@@ -965,22 +1011,52 @@ function App() {
                       <div className="calibrating-container scraping-blink">
                         <span>SCRAPING STREAM...</span>
                       </div>
+                    ) : isPoweringOff ? (
+                      <div className="lcd-power-off-collapse">
+                        <div className="collapse-dot"></div>
+                      </div>
+                    ) : isVolumeChanging ? (
+                      <div className="lcd-volume-state">
+                        <span className="lcd-vol-text">VOL {Math.round(volume * 100)}</span>
+                        <div className="lcd-vol-grid">
+                          {[...Array(20)].map((_, i) => (
+                            <div key={i} className={`vol-dot ${(i / 20) <= volume ? 'on' : 'off'}`}></div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : isSignalLost ? (
+                      <div className="lcd-signal-lost">
+                        <div className="signal-lost-grid">
+                          {[...Array(3)].map((_, row) => (
+                            <div key={row} className="signal-row">
+                              {[...Array(20)].map((_, col) => (
+                                <div key={col} className={`signal-dot ${(row + col) % 2 === 0 ? 'cross-active' : ''}`} style={{animationDelay: `${col * 0.05}s`}}></div>
+                              ))}
+                            </div>
+                          ))}
+                        </div>
+                        <span className="signal-lost-text">NO SIGNAL</span>
+                      </div>
                     ) : activeDisplayName !== "------" && isBuffering && isPlaying ? (
                       <div className="calibrating-container">
-                        <div className="sliding-squares-loader left stretch">
-                          <div className="square"></div>
-                          <div className="square"></div>
-                          <div className="square"></div>
-                          <div className="square"></div>
-                          <div className="square"></div>
+                        <div className="tuning-grid tuning-grid-left">
+                           {[...Array(3)].map((_, row) => (
+                             <div key={row} className="tuning-row">
+                               {[...Array(7)].map((_, col) => (
+                                 <div key={col} className="tuning-dot left cross-active" style={{animationDelay: `${col * 0.1}s`}}></div>
+                               ))}
+                             </div>
+                           ))}
                         </div>
                         <span>TUNING</span>
-                        <div className="sliding-squares-loader right stretch">
-                          <div className="square"></div>
-                          <div className="square"></div>
-                          <div className="square"></div>
-                          <div className="square"></div>
-                          <div className="square"></div>
+                        <div className="tuning-grid tuning-grid-right">
+                           {[...Array(3)].map((_, row) => (
+                             <div key={row} className="tuning-row">
+                               {[...Array(7)].map((_, col) => (
+                                 <div key={col} className="tuning-dot right cross-active" style={{animationDelay: `${(6 - col) * 0.1}s`}}></div>
+                               ))}
+                             </div>
+                           ))}
                         </div>
                       </div>
                     ) : (
