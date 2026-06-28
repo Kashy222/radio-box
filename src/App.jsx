@@ -1038,12 +1038,12 @@ function App() {
                         <span className="signal-lost-text">NO SIGNAL</span>
                       </div>
                     ) : activeDisplayName !== "------" && isBuffering && isPlaying ? (
-                      <div className="calibrating-container">
+                      <div className="calibrating-container" style={{ width: '100%', justifyContent: 'space-between' }}>
                         <div className="tuning-grid tuning-grid-left">
                            {[...Array(3)].map((_, row) => (
                              <div key={row} className="tuning-row">
-                               {[...Array(7)].map((_, col) => (
-                                 <div key={col} className="tuning-dot left cross-active" style={{animationDelay: `${col * 0.1}s`}}></div>
+                               {[...Array(15)].map((_, col) => (
+                                 <div key={col} className="tuning-dot left cross-active" style={{animationDelay: `${col * 0.05}s`}}></div>
                                ))}
                              </div>
                            ))}
@@ -1052,8 +1052,8 @@ function App() {
                         <div className="tuning-grid tuning-grid-right">
                            {[...Array(3)].map((_, row) => (
                              <div key={row} className="tuning-row">
-                               {[...Array(7)].map((_, col) => (
-                                 <div key={col} className="tuning-dot right cross-active" style={{animationDelay: `${(6 - col) * 0.1}s`}}></div>
+                               {[...Array(15)].map((_, col) => (
+                                 <div key={col} className="tuning-dot right cross-active" style={{animationDelay: `${(14 - col) * 0.05}s`}}></div>
                                ))}
                              </div>
                            ))}
