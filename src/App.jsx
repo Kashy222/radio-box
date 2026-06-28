@@ -58,6 +58,9 @@ const REGIONS = [
 ];
 
 const fetchRegionalStations = async (countryCode) => {
+  if (countryCode === 'IN') {
+    return DEFAULT_STATIONS;
+  }
   try {
     const res = await fetch(`https://de1.api.radio-browser.info/json/stations/bycountrycodeexact/${countryCode}?limit=25&order=votes&reverse=true&hidebroken=true`);
     const data = await res.json();
@@ -73,12 +76,12 @@ const fetchRegionalStations = async (countryCode) => {
           stationuuid: st.stationuuid
         };
       });
-      return countryCode === 'IN' ? [...apiStations, ...MUMBAI_STATIONS] : apiStations;
+      return apiStations;
     }
   } catch (err) {
     console.error("Radio browser fetch failed:", err);
   }
-  return countryCode === 'IN' ? MUMBAI_STATIONS : [];
+  return [];
 };
 
 const VolumeWedge = () => {
