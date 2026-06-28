@@ -1031,14 +1031,9 @@ function App() {
                   {/* Main digits in dot-matrix font */}
                   <div className="lcd-digits-container">
                     {(isSignalLost || isOffline) ? (
-                      <>
-                        <span className="lcd-freq-numbers">
-                          ---
-                          <span className="lcd-dot">.</span>
-                          --
-                        </span>
-                        <span className="lcd-unit">MHz</span>
-                      </>
+                      <span className="lcd-freq-numbers" style={{ letterSpacing: '4px' }}>
+                        *_*
+                      </span>
                     ) : (
                       <>
                         <span className="lcd-freq-numbers">
