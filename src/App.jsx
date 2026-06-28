@@ -1006,63 +1006,61 @@ function App() {
                 </div>
 
                 <div className="lcd-station-title-box">
-                  <div className="lcd-station-title">
-                    {isScraping ? (
-                      <div className="calibrating-container scraping-blink">
-                        <span>SCRAPING STREAM...</span>
+                  {isScraping ? (
+                    <div className="calibrating-container scraping-blink">
+                      <span className="lcd-station-title">SCRAPING STREAM...</span>
+                    </div>
+                  ) : isPoweringOff ? (
+                    <div className="lcd-power-off-collapse">
+                      <div className="collapse-dot"></div>
+                    </div>
+                  ) : isVolumeChanging ? (
+                    <div className="lcd-volume-state">
+                      <span className="lcd-vol-text">VOL {Math.round(volume * 100)}</span>
+                      <div className="lcd-vol-grid">
+                        {[...Array(20)].map((_, i) => (
+                          <div key={i} className={`vol-dot ${(i / 20) <= volume ? 'on' : 'off'}`}></div>
+                        ))}
                       </div>
-                    ) : isPoweringOff ? (
-                      <div className="lcd-power-off-collapse">
-                        <div className="collapse-dot"></div>
+                    </div>
+                  ) : isSignalLost ? (
+                    <div className="lcd-signal-lost">
+                      <div className="signal-lost-grid">
+                        {[...Array(3)].map((_, row) => (
+                          <div key={row} className="signal-row">
+                            {[...Array(20)].map((_, col) => (
+                              <div key={col} className={`signal-dot ${(row + col) % 2 === 0 ? 'cross-active' : ''}`} style={{animationDelay: `${col * 0.08}s`}}></div>
+                            ))}
+                          </div>
+                        ))}
                       </div>
-                    ) : isVolumeChanging ? (
-                      <div className="lcd-volume-state">
-                        <span className="lcd-vol-text">VOL {Math.round(volume * 100)}</span>
-                        <div className="lcd-vol-grid">
-                          {[...Array(20)].map((_, i) => (
-                            <div key={i} className={`vol-dot ${(i / 20) <= volume ? 'on' : 'off'}`}></div>
-                          ))}
-                        </div>
+                      <span className="signal-lost-text">NO SIGNAL</span>
+                    </div>
+                  ) : activeDisplayName !== "------" && isBuffering && isPlaying ? (
+                    <div className="calibrating-container" style={{ width: '100%', justifyContent: 'space-between' }}>
+                      <div className="tuning-grid tuning-grid-left">
+                         {[...Array(3)].map((_, row) => (
+                           <div key={row} className="tuning-row">
+                             {[...Array(15)].map((_, col) => (
+                               <div key={col} className="tuning-dot left cross-active" style={{animationDelay: `${col * 0.08}s`}}></div>
+                             ))}
+                           </div>
+                         ))}
                       </div>
-                    ) : isSignalLost ? (
-                      <div className="lcd-signal-lost">
-                        <div className="signal-lost-grid">
-                          {[...Array(3)].map((_, row) => (
-                            <div key={row} className="signal-row">
-                              {[...Array(20)].map((_, col) => (
-                                <div key={col} className={`signal-dot ${(row + col) % 2 === 0 ? 'cross-active' : ''}`} style={{animationDelay: `${col * 0.05}s`}}></div>
-                              ))}
-                            </div>
-                          ))}
-                        </div>
-                        <span className="signal-lost-text">NO SIGNAL</span>
+                      <span className="lcd-station-title">TUNING</span>
+                      <div className="tuning-grid tuning-grid-right">
+                         {[...Array(3)].map((_, row) => (
+                           <div key={row} className="tuning-row">
+                             {[...Array(15)].map((_, col) => (
+                               <div key={col} className="tuning-dot right cross-active" style={{animationDelay: `${(14 - col) * 0.08}s`}}></div>
+                             ))}
+                           </div>
+                         ))}
                       </div>
-                    ) : activeDisplayName !== "------" && isBuffering && isPlaying ? (
-                      <div className="calibrating-container" style={{ width: '100%', justifyContent: 'space-between' }}>
-                        <div className="tuning-grid tuning-grid-left">
-                           {[...Array(3)].map((_, row) => (
-                             <div key={row} className="tuning-row">
-                               {[...Array(15)].map((_, col) => (
-                                 <div key={col} className="tuning-dot left cross-active" style={{animationDelay: `${col * 0.05}s`}}></div>
-                               ))}
-                             </div>
-                           ))}
-                        </div>
-                        <span>TUNING</span>
-                        <div className="tuning-grid tuning-grid-right">
-                           {[...Array(3)].map((_, row) => (
-                             <div key={row} className="tuning-row">
-                               {[...Array(15)].map((_, col) => (
-                                 <div key={col} className="tuning-dot right cross-active" style={{animationDelay: `${(14 - col) * 0.05}s`}}></div>
-                               ))}
-                             </div>
-                           ))}
-                        </div>
-                      </div>
-                    ) : (
-                      activeDisplayName
-                    )}
-                  </div>
+                    </div>
+                  ) : (
+                    <div className="lcd-station-title">{activeDisplayName}</div>
+                  )}
                   {savedIndex !== -1 && (
                     <div className="lcd-preset-badge">
                       P-{String(savedIndex + 1).padStart(2, '0')}
