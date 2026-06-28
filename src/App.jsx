@@ -159,6 +159,7 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isScraping, setIsScraping] = useState(false);
   const [isBuffering, setIsBuffering] = useState(false); // Track if audio is currently buffering
+  const [scrambleOffset, setScrambleOffset] = useState(0);
   const [isMono, setIsMono] = useState(false);
   const [isPowerOn, setIsPowerOn] = useState(false); // Power state defaults to off
   const [savedStations, setSavedStations] = useState(() => {
@@ -189,6 +190,20 @@ function App() {
   const [selectedRegionId, setSelectedRegionId] = useState(null);
   const [geoCity, setGeoCity] = useState(null);
   const [geoCountryCode, setGeoCountryCode] = useState(null);
+
+  // Scramble frequency effect when buffering
+  useEffect(() => {
+    let interval;
+    if (isBuffering && isPlaying && isPowerOn) {
+      interval = setInterval(() => {
+        // Generate random offset between -0.45 and +0.45
+        setScrambleOffset((Math.random() * 0.9) - 0.45);
+      }, 70); // Scramble rapidly every 70ms
+    } else {
+      setScrambleOffset(0);
+    }
+    return () => clearInterval(interval);
+  }, [isBuffering, isPlaying, isPowerOn]);
 
   const audioRef = useRef(null);
   const dragItem = useRef(null);
@@ -887,6 +902,8 @@ function App() {
     return savedStations.findIndex(s => s && Math.abs(s.freq - frequency) < 0.05);
   }, [frequency, savedStations]);
 
+  const displayFreqStr = Math.max(MIN_FREQ, Math.min(MAX_FREQ, frequency + scrambleOffset)).toFixed(2);
+
   return (
     <div className="modern-retro-player-wrapper">
       <div className="player-body">
@@ -934,9 +951,9 @@ function App() {
                   {/* Main digits in dot-matrix font */}
                   <div className="lcd-digits-container">
                     <span className="lcd-freq-numbers">
-                      {frequency.toFixed(2).split('.')[0]}
+                      {displayFreqStr.split('.')[0]}
                       <span className="lcd-dot">.</span>
-                      {frequency.toFixed(2).split('.')[1]}
+                      {displayFreqStr.split('.')[1]}
                     </span>
                     <span className="lcd-unit">MHz</span>
                   </div>
@@ -950,13 +967,17 @@ function App() {
                       </div>
                     ) : activeDisplayName !== "------" && isBuffering && isPlaying ? (
                       <div className="calibrating-container">
-                        <div className="sliding-squares-loader left">
+                        <div className="sliding-squares-loader left stretch">
+                          <div className="square"></div>
+                          <div className="square"></div>
                           <div className="square"></div>
                           <div className="square"></div>
                           <div className="square"></div>
                         </div>
                         <span>TUNING</span>
-                        <div className="sliding-squares-loader right">
+                        <div className="sliding-squares-loader right stretch">
+                          <div className="square"></div>
+                          <div className="square"></div>
                           <div className="square"></div>
                           <div className="square"></div>
                           <div className="square"></div>

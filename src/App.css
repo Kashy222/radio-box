@@ -300,6 +300,14 @@
   animation-delay: 0.3s;
 }
 
+.sliding-squares-loader .square:nth-child(4) {
+  animation-delay: 0.45s;
+}
+
+.sliding-squares-loader .square:nth-child(5) {
+  animation-delay: 0.6s;
+}
+
 /* More intricate pulsing animation for LCD feel */
 @keyframes lcdPulse {
   0%, 100% { opacity: 0.15; transform: scale(0.8); }
