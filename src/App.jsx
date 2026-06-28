@@ -210,7 +210,6 @@ function App() {
       if (audioRef.current) {
         audioRef.current.pause();
       }
-      setIsPlaying(false);
     };
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
@@ -667,10 +666,10 @@ function App() {
     }
   }, [staticVolume, volume, isPlaying, isPowerOn]);
 
-  // Update source when current station shifts
+  // Update source when current station shifts or reconnects
   useEffect(() => {
     const audio = audioRef.current;
-    if (isPlaying && currentStation && currentStation.url_resolved && isPowerOn) {
+    if (isPlaying && currentStation && currentStation.url_resolved && isPowerOn && !isOffline) {
       setIsBuffering(true);
       
       const playAudio = (url) => {
@@ -701,7 +700,7 @@ function App() {
         playAudio(currentStation.url_resolved);
       }
     }
-  }, [currentStation, isPlaying, isPowerOn]);
+  }, [currentStation, isPlaying, isPowerOn, isOffline]);
 
   // Sync play state depending on tuning volume
   useEffect(() => {
