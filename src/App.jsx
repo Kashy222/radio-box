@@ -1015,8 +1015,10 @@ function App() {
                       <div className="collapse-dot"></div>
                     </div>
                   ) : isVolumeChanging ? (
-                    <div className="calibrating-container" style={{ display: 'flex', alignItems: 'center', marginLeft: '-16px', marginRight: '-16px', paddingLeft: '16px' }}>
-                      <span className="lcd-station-title" style={{ paddingRight: '12px' }}>VOL {Math.round(volume * 100)}</span>
+                    <div className="calibrating-container" style={{ display: 'flex', alignItems: 'center', marginLeft: '-16px', marginRight: '-16px', paddingLeft: '8px', gap: '4px' }}>
+                      <div style={{ width: '85px', textAlign: 'left', flexShrink: 0, paddingLeft: '8px' }}>
+                        <span className="lcd-station-title">VOL {Math.round(volume * 100)}</span>
+                      </div>
                       <div style={{ flex: 1, overflow: 'hidden', display: 'flex', justifyContent: 'flex-start' }}>
                         <div className="tuning-grid">
                           {[...Array(3)].map((_, row) => (
