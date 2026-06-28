@@ -1025,12 +1025,20 @@ function App() {
                 <div className="lcd-frequency-row">
                   {/* Main digits in dot-matrix font */}
                   <div className="lcd-digits-container">
-                    <span className="lcd-freq-numbers">
-                      {displayFreqStr.split('.')[0]}
-                      <span className="lcd-dot">.</span>
-                      {displayFreqStr.split('.')[1]}
-                    </span>
-                    <span className="lcd-unit">MHz</span>
+                    {(isSignalLost || isOffline) ? (
+                      <span className="lcd-freq-numbers" style={{ letterSpacing: '4px' }}>
+                        X_X
+                      </span>
+                    ) : (
+                      <>
+                        <span className="lcd-freq-numbers">
+                          {displayFreqStr.split('.')[0]}
+                          <span className="lcd-dot">.</span>
+                          {displayFreqStr.split('.')[1]}
+                        </span>
+                        <span className="lcd-unit">MHz</span>
+                      </>
+                    )}
                   </div>
                 </div>
 
