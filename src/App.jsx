@@ -166,7 +166,10 @@ function App() {
   const [isVolumeChanging, setIsVolumeChanging] = useState(false);
   const [isPoweringOff, setIsPoweringOff] = useState(false);
   const volumeTimeoutRef = useRef(null);
-  const nextStationRef = useRef(null);
+  const [tuningDirection, setTuningDirection] = useState(1);
+  const skipNextRef = useRef(null);
+  const skipPrevRef = useRef(null);
+  const tuningDirectionRef = useRef(1);
   
   const [isMono, setIsMono] = useState(false);
   const [isPowerOn, setIsPowerOn] = useState(false); // Power state defaults to off
@@ -200,7 +203,9 @@ function App() {
   const [geoCountryCode, setGeoCountryCode] = useState(null);
 
   useEffect(() => {
-    nextStationRef.current = handleNextStation;
+    skipNextRef.current = handleNextStation;
+    skipPrevRef.current = handlePrevStation;
+    tuningDirectionRef.current = tuningDirection;
   });
 
   useEffect(() => {
@@ -233,21 +238,19 @@ function App() {
   // Auto skip logic if buffering fails
   useEffect(() => {
     let timeoutId;
-    let signalLostTimeoutId;
     if (isBuffering && isPlaying && isPowerOn) {
       timeoutId = setTimeout(() => {
-        setIsSignalLost(true);
-        signalLostTimeoutId = setTimeout(() => {
-          setIsSignalLost(false);
-          if (nextStationRef.current) nextStationRef.current();
-        }, 1500);
+        if (tuningDirectionRef.current === -1 && skipPrevRef.current) {
+          skipPrevRef.current();
+        } else if (skipNextRef.current) {
+          skipNextRef.current();
+        }
       }, 4500); // 4.5s wait
     } else {
       setIsSignalLost(false);
     }
     return () => {
       clearTimeout(timeoutId);
-      clearTimeout(signalLostTimeoutId);
     };
   }, [isBuffering, isPlaying, isPowerOn]);
 
@@ -729,6 +732,7 @@ function App() {
 
   const handlePrevStation = () => {
     if (!isPowerOn || stationFrequencies.length === 0) return;
+    setTuningDirection(-1);
     const currentIndex = stationFrequencies.findIndex(s => s.stationuuid === currentStation?.stationuuid);
     let prevIndex = currentIndex - 1;
     if (prevIndex < 0) prevIndex = stationFrequencies.length - 1;
@@ -740,6 +744,7 @@ function App() {
 
   const handleNextStation = () => {
     if (!isPowerOn || stationFrequencies.length === 0) return;
+    setTuningDirection(1);
     const currentIndex = stationFrequencies.findIndex(s => s.stationuuid === currentStation?.stationuuid);
     let nextIndex = currentIndex + 1;
     if (nextIndex >= stationFrequencies.length) nextIndex = 0;
