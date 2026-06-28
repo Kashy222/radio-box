@@ -13,7 +13,7 @@ const MAX_FREQ = 108.0;
 const DEFAULT_STATIONS = [
   { freq: 91.1, name: 'Radio City', url_resolved: 'https://drive.uber.radio/uber/bollywood2000s/icecast.audio', stationuuid: 'ind-rc-911' },
   { freq: 91.9, name: 'Radio One', url_resolved: 'https://strmreg.1.fm/bombaybeats_mobile_mp3', stationuuid: 'ind-ro-919' },
-  { freq: 92.7, name: 'BIG FM', url_resolved: 'https://stream.zeno.fm/dbstwo3dvhhtv', stationuuid: 'ind-big-927' },
+  { freq: 92.7, name: 'BIG FM', url_resolved: 'https://drive.uber.radio/uber/bollywood2010s/icecast.audio', stationuuid: 'ind-big-927' },
   { freq: 93.5, name: 'Red FM', url_resolved: 'https://funasia.streamguys1.com/live9', stationuuid: 'ind-red-935' },
   { freq: 94.3, name: 'Radio One Hits', url_resolved: 'https://strmreg.1.fm/bombaybeats_mobile_mp3', stationuuid: 'ind-ro-943' },
   { freq: 95.0, name: 'Radio City Hits', url_resolved: 'https://server.mixify.in/listen/new_hits/radio.mp3', stationuuid: 'ind-rc-950' },
@@ -29,7 +29,7 @@ const DEFAULT_STATIONS = [
 
 const MUMBAI_STATIONS = [
   { freq: 91.1, name: 'Radio City Mumbai', url_resolved: 'https://drive.uber.radio/uber/bollywood2000s/icecast.audio', stationuuid: 'mum-rc-911' },
-  { freq: 92.7, name: 'BIG FM Mumbai', url_resolved: 'https://stream.zeno.fm/dbstwo3dvhhtv', stationuuid: 'mum-big-927' },
+  { freq: 92.7, name: 'BIG FM Mumbai', url_resolved: 'https://drive.uber.radio/uber/bollywood2010s/icecast.audio', stationuuid: 'mum-big-927' },
   { freq: 93.5, name: 'Red FM Mumbai', url_resolved: 'https://funasia.streamguys1.com/live9', stationuuid: 'mum-red-935' },
   { freq: 94.3, name: 'Radio One Mumbai', url_resolved: 'https://strmreg.1.fm/bombaybeats_mobile_mp3', stationuuid: 'mum-ro-943' },
   { freq: 98.3, name: 'Radio Mirchi Mumbai', url_resolved: 'https://eu8.fastcast4u.com/proxy/clyedupq/stream', stationuuid: 'mum-rm-983' },
