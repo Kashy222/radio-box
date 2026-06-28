@@ -162,6 +162,7 @@ function App() {
   const [scrambleOffset, setScrambleOffset] = useState(0);
   const [isSignalLost, setIsSignalLost] = useState(false);
   const [isOffline, setIsOffline] = useState(typeof navigator !== 'undefined' ? !navigator.onLine : false);
+  const [noSignalOffset, setNoSignalOffset] = useState(0);
   const [isVolumeChanging, setIsVolumeChanging] = useState(false);
   const [isPoweringOff, setIsPoweringOff] = useState(false);
   const volumeTimeoutRef = useRef(null);
@@ -204,7 +205,13 @@ function App() {
 
   useEffect(() => {
     const handleOnline = () => setIsOffline(false);
-    const handleOffline = () => setIsOffline(true);
+    const handleOffline = () => {
+      setIsOffline(true);
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      setIsPlaying(false);
+    };
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
     return () => {
@@ -212,6 +219,17 @@ function App() {
       window.removeEventListener('offline', handleOffline);
     };
   }, []);
+
+  // No Signal X Pattern animation
+  useEffect(() => {
+    let interval;
+    if ((isSignalLost || isOffline) && isPowerOn) {
+      interval = setInterval(() => {
+        setNoSignalOffset(prev => (prev + 1) % 4);
+      }, 500); // 1 position at a time
+    }
+    return () => clearInterval(interval);
+  }, [isSignalLost, isOffline, isPowerOn]);
 
   // Auto skip logic if buffering fails
   useEffect(() => {
@@ -237,7 +255,7 @@ function App() {
   // Scramble frequency effect when buffering
   useEffect(() => {
     let interval;
-    if (isBuffering && isPlaying && isPowerOn) {
+    if (isBuffering && isPlaying && isPowerOn && !isOffline && !isSignalLost) {
       interval = setInterval(() => {
         // Generate random offset between -0.45 and +0.45
         setScrambleOffset((Math.random() * 0.9) - 0.45);
@@ -1046,24 +1064,28 @@ function App() {
                   ) : isSignalLost || isOffline ? (
                     <div className="calibrating-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginLeft: '-16px', marginRight: '-16px' }}>
                       <div style={{ flex: 1, overflow: 'hidden', display: 'flex', justifyContent: 'flex-start' }}>
-                        <div className="signal-lost-grid">
+                        <div className="tuning-grid">
                           {[...Array(3)].map((_, row) => (
-                            <div key={row} className="signal-row" style={{ minWidth: 'max-content' }}>
-                              {[...Array(30)].map((_, col) => (
-                                <div key={col} className={`signal-dot ${(row + col) % 2 === 0 ? 'cross-active' : ''}`} style={{animationDelay: `${col * 0.08}s`}}></div>
-                              ))}
+                            <div key={row} className="tuning-row" style={{ minWidth: 'max-content' }}>
+                              {[...Array(40)].map((_, col) => {
+                                const adjustedCol = (col - noSignalOffset + 40) % 4;
+                                const isLit = (adjustedCol === 0 && (row === 0 || row === 2)) || (adjustedCol === 1 && row === 1) || (adjustedCol === 2 && (row === 0 || row === 2));
+                                return <div key={col} className="tuning-dot" style={{ opacity: isLit ? 1 : 0.15 }}></div>;
+                              })}
                             </div>
                           ))}
                         </div>
                       </div>
                       <span className="lcd-station-title" style={{ padding: '0 8px' }}>NO SIGNAL</span>
                       <div style={{ flex: 1, overflow: 'hidden', display: 'flex', justifyContent: 'flex-end' }}>
-                        <div className="signal-lost-grid">
+                        <div className="tuning-grid" style={{ direction: 'rtl' }}>
                           {[...Array(3)].map((_, row) => (
-                            <div key={row} className="signal-row" style={{ minWidth: 'max-content' }}>
-                              {[...Array(30)].map((_, col) => (
-                                <div key={col} className={`signal-dot ${(row + col) % 2 === 0 ? 'cross-active' : ''}`} style={{animationDelay: `${col * 0.08}s`}}></div>
-                              ))}
+                            <div key={row} className="tuning-row" style={{ minWidth: 'max-content', direction: 'ltr' }}>
+                              {[...Array(40)].map((_, col) => {
+                                const adjustedCol = (col + noSignalOffset) % 4;
+                                const isLit = (adjustedCol === 0 && (row === 0 || row === 2)) || (adjustedCol === 1 && row === 1) || (adjustedCol === 2 && (row === 0 || row === 2));
+                                return <div key={col} className="tuning-dot" style={{ opacity: isLit ? 1 : 0.15 }}></div>;
+                              })}
                             </div>
                           ))}
                         </div>
