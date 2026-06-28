@@ -1015,60 +1015,70 @@ function App() {
                       <div className="collapse-dot"></div>
                     </div>
                   ) : isVolumeChanging ? (
-                    <div className="calibrating-container">
-                      <span className="lcd-station-title" style={{ marginRight: '12px' }}>VOL {Math.round(volume * 100)}</span>
-                      <div className="tuning-grid">
-                        {[...Array(3)].map((_, row) => (
-                          <div key={row} className="tuning-row">
-                            {[...Array(20)].map((_, col) => (
-                              <div key={col} className="tuning-dot" style={{ opacity: (col / 20) <= volume ? 1 : 0.15 }}></div>
-                            ))}
-                          </div>
-                        ))}
+                    <div className="calibrating-container" style={{ display: 'flex', alignItems: 'center', marginLeft: '-16px', marginRight: '-16px', paddingLeft: '16px' }}>
+                      <span className="lcd-station-title" style={{ paddingRight: '12px' }}>VOL {Math.round(volume * 100)}</span>
+                      <div style={{ flex: 1, overflow: 'hidden', display: 'flex', justifyContent: 'flex-start' }}>
+                        <div className="tuning-grid">
+                          {[...Array(3)].map((_, row) => (
+                            <div key={row} className="tuning-row" style={{ minWidth: 'max-content' }}>
+                              {[...Array(40)].map((_, col) => (
+                                <div key={col} className="tuning-dot" style={{ opacity: (col / 40) <= volume ? 1 : 0.15 }}></div>
+                              ))}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   ) : isSignalLost ? (
-                    <div className="calibrating-container" style={{ width: '100%' }}>
-                      <div className="signal-lost-grid" style={{ marginRight: '12px' }}>
-                        {[...Array(3)].map((_, row) => (
-                          <div key={row} className="signal-row">
-                            {[...Array(12)].map((_, col) => (
-                              <div key={col} className={`signal-dot ${(row + col) % 2 === 0 ? 'cross-active' : ''}`} style={{animationDelay: `${col * 0.08}s`}}></div>
-                            ))}
-                          </div>
-                        ))}
+                    <div className="calibrating-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginLeft: '-16px', marginRight: '-16px' }}>
+                      <div style={{ flex: 1, overflow: 'hidden', display: 'flex', justifyContent: 'flex-start' }}>
+                        <div className="signal-lost-grid">
+                          {[...Array(3)].map((_, row) => (
+                            <div key={row} className="signal-row" style={{ minWidth: 'max-content' }}>
+                              {[...Array(30)].map((_, col) => (
+                                <div key={col} className={`signal-dot ${(row + col) % 2 === 0 ? 'cross-active' : ''}`} style={{animationDelay: `${col * 0.08}s`}}></div>
+                              ))}
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                      <span className="lcd-station-title">NO SIGNAL</span>
-                      <div className="signal-lost-grid" style={{ marginLeft: '12px' }}>
-                        {[...Array(3)].map((_, row) => (
-                          <div key={row} className="signal-row">
-                            {[...Array(12)].map((_, col) => (
-                              <div key={col} className={`signal-dot ${(row + col) % 2 === 0 ? 'cross-active' : ''}`} style={{animationDelay: `${col * 0.08}s`}}></div>
-                            ))}
-                          </div>
-                        ))}
+                      <span className="lcd-station-title" style={{ padding: '0 8px' }}>NO SIGNAL</span>
+                      <div style={{ flex: 1, overflow: 'hidden', display: 'flex', justifyContent: 'flex-end' }}>
+                        <div className="signal-lost-grid">
+                          {[...Array(3)].map((_, row) => (
+                            <div key={row} className="signal-row" style={{ minWidth: 'max-content' }}>
+                              {[...Array(30)].map((_, col) => (
+                                <div key={col} className={`signal-dot ${(row + col) % 2 === 0 ? 'cross-active' : ''}`} style={{animationDelay: `${col * 0.08}s`}}></div>
+                              ))}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   ) : activeDisplayName !== "------" && isBuffering && isPlaying ? (
-                    <div className="calibrating-container" style={{ width: '100%', position: 'relative' }}>
-                      <div className="tuning-grid tuning-grid-left" style={{ position: 'absolute', left: 0 }}>
-                         {[...Array(3)].map((_, row) => (
-                           <div key={row} className="tuning-row">
-                             {[...Array(12)].map((_, col) => (
-                               <div key={col} className="tuning-dot left cross-active" style={{animationDelay: `${col * 0.08}s`}}></div>
-                             ))}
-                           </div>
-                         ))}
+                    <div className="calibrating-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginLeft: '-16px', marginRight: '-16px' }}>
+                      <div style={{ flex: 1, overflow: 'hidden', display: 'flex', justifyContent: 'flex-start' }}>
+                        <div className="tuning-grid">
+                           {[...Array(3)].map((_, row) => (
+                             <div key={row} className="tuning-row" style={{ minWidth: 'max-content' }}>
+                               {[...Array(30)].map((_, col) => (
+                                 <div key={col} className="tuning-dot left cross-active" style={{animationDelay: `${col * 0.08}s`}}></div>
+                               ))}
+                             </div>
+                           ))}
+                        </div>
                       </div>
-                      <span className="lcd-station-title">TUNING</span>
-                      <div className="tuning-grid tuning-grid-right" style={{ position: 'absolute', right: 0 }}>
-                         {[...Array(3)].map((_, row) => (
-                           <div key={row} className="tuning-row">
-                             {[...Array(12)].map((_, col) => (
-                               <div key={col} className="tuning-dot right cross-active" style={{animationDelay: `${(11 - col) * 0.08}s`}}></div>
-                             ))}
-                           </div>
-                         ))}
+                      <span className="lcd-station-title" style={{ padding: '0 8px' }}>TUNING</span>
+                      <div style={{ flex: 1, overflow: 'hidden', display: 'flex', justifyContent: 'flex-end' }}>
+                        <div className="tuning-grid">
+                           {[...Array(3)].map((_, row) => (
+                             <div key={row} className="tuning-row" style={{ minWidth: 'max-content' }}>
+                               {[...Array(30)].map((_, col) => (
+                                 <div key={col} className="tuning-dot right cross-active" style={{animationDelay: `${(29 - col) * 0.08}s`}}></div>
+                               ))}
+                             </div>
+                           ))}
+                        </div>
                       </div>
                     </div>
                   ) : (
