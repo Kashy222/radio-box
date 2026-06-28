@@ -161,6 +161,7 @@ function App() {
   const [isBuffering, setIsBuffering] = useState(false); // Track if audio is currently buffering
   const [scrambleOffset, setScrambleOffset] = useState(0);
   const [isSignalLost, setIsSignalLost] = useState(false);
+  const [isOffline, setIsOffline] = useState(typeof navigator !== 'undefined' ? !navigator.onLine : false);
   const [isVolumeChanging, setIsVolumeChanging] = useState(false);
   const [isPoweringOff, setIsPoweringOff] = useState(false);
   const volumeTimeoutRef = useRef(null);
@@ -200,6 +201,17 @@ function App() {
   useEffect(() => {
     nextStationRef.current = handleNextStation;
   });
+
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   // Auto skip logic if buffering fails
   useEffect(() => {
@@ -1015,8 +1027,8 @@ function App() {
                       <div className="collapse-dot"></div>
                     </div>
                   ) : isVolumeChanging ? (
-                    <div className="calibrating-container" style={{ display: 'flex', alignItems: 'center', marginLeft: '-16px', marginRight: '-16px', paddingLeft: '8px', gap: '4px' }}>
-                      <div style={{ width: '85px', textAlign: 'left', flexShrink: 0, paddingLeft: '8px' }}>
+                    <div className="calibrating-container" style={{ display: 'flex', alignItems: 'center', marginLeft: '-16px', marginRight: '-16px', paddingLeft: '8px', gap: '0px' }}>
+                      <div style={{ width: '75px', textAlign: 'left', flexShrink: 0, paddingLeft: '8px' }}>
                         <span className="lcd-station-title">VOL {Math.round(volume * 100)}</span>
                       </div>
                       <div style={{ flex: 1, overflow: 'hidden', display: 'flex', justifyContent: 'flex-start' }}>
@@ -1024,14 +1036,14 @@ function App() {
                           {[...Array(3)].map((_, row) => (
                             <div key={row} className="tuning-row" style={{ minWidth: 'max-content' }}>
                               {[...Array(40)].map((_, col) => (
-                                <div key={col} className="tuning-dot" style={{ opacity: (col / 40) < volume ? 1 : 0.15 }}></div>
+                                <div key={col} className="tuning-dot" style={{ opacity: (col / 30) < volume ? 1 : 0.15 }}></div>
                               ))}
                             </div>
                           ))}
                         </div>
                       </div>
                     </div>
-                  ) : isSignalLost ? (
+                  ) : isSignalLost || isOffline ? (
                     <div className="calibrating-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginLeft: '-16px', marginRight: '-16px' }}>
                       <div style={{ flex: 1, overflow: 'hidden', display: 'flex', justifyContent: 'flex-start' }}>
                         <div className="signal-lost-grid">
