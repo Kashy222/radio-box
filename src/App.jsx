@@ -57,8 +57,14 @@ const REGIONS = [
   { id: 'AU', code: 'AU', name: 'Oceania', flagUrl: '/images/Oceania.svg' },
 ];
 
-const fetchRegionalStations = async (countryCode) => {
+const fetchRegionalStations = async (countryCode, cityName) => {
   if (countryCode === 'IN') {
+    if (cityName === 'Mumbai' || cityName === 'Pune') {
+      return MUMBAI_STATIONS;
+    }
+    if (cityName === 'Nashik') {
+      return NASHIK_STATIONS;
+    }
     return DEFAULT_STATIONS;
   }
   try {
@@ -215,10 +221,11 @@ function App() {
       const region = REGIONS.find(r => r.id === savedRegionId) || REGIONS[0];
       if (geoCountryCode === region.code && geoCity) {
         setCurrentCity(geoCity);
+        fetchRegionalStations(region.code, geoCity).then(setStations);
       } else {
         setCurrentCity(region.name);
+        fetchRegionalStations(region.code, null).then(setStations);
       }
-      fetchRegionalStations(region.code).then(setStations);
     } else {
       setIsLocationModalOpen(true);
     }
@@ -242,6 +249,8 @@ function App() {
             const activeRegion = REGIONS.find(r => r.id === activeRegionId) || REGIONS[0];
             if (activeRegion.code === countryCode) {
               setCurrentCity(city);
+              const newStations = await fetchRegionalStations(activeRegion.code, city);
+              setStations(newStations);
             }
           } else {
             let exactMatch = REGIONS.find(r => r.code === countryCode);
@@ -249,7 +258,7 @@ function App() {
             localStorage.setItem('regionCode', matchedRegion.id);
             setCurrentCity(city);
             setIsPlaying(true);
-            const newStations = await fetchRegionalStations(matchedRegion.code);
+            const newStations = await fetchRegionalStations(matchedRegion.code, city);
             setStations(newStations);
             
             // Only auto-close the modal if their country is natively supported
@@ -272,14 +281,16 @@ function App() {
     if (selectedRegionId === region.id) {
       localStorage.setItem('regionCode', region.id);
       
+      let cityForStations = null;
       if (geoCountryCode === region.code && geoCity) {
         setCurrentCity(geoCity);
+        cityForStations = geoCity;
       } else {
         setCurrentCity(region.name);
       }
 
       setIsPlaying(true);
-      const newStations = await fetchRegionalStations(region.code);
+      const newStations = await fetchRegionalStations(region.code, cityForStations);
       setStations(newStations);
       setIsLocationModalOpen(false);
     } else {
