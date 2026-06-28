@@ -68,11 +68,12 @@ const fetchRegionalStations = async (countryCode, cityName) => {
     return DEFAULT_STATIONS;
   }
   try {
-    const res = await fetch(`https://de1.api.radio-browser.info/json/stations/bycountrycodeexact/${countryCode}?limit=25&order=votes&reverse=true&hidebroken=true`);
+    const res = await fetch(`https://de1.api.radio-browser.info/json/stations/bycountrycodeexact/${countryCode}?limit=50&order=votes&reverse=true&hidebroken=true`);
     const data = await res.json();
     if (data && data.length > 0) {
+      const validData = data.filter(st => st.url_resolved && !st.url_resolved.toLowerCase().includes('zeno.fm')).slice(0, 25);
       let currentFreq = 88.0;
-      const apiStations = data.map(st => {
+      const apiStations = validData.map(st => {
         const freq = parseFloat((currentFreq += 0.6).toFixed(1));
         if (currentFreq > 107.0) currentFreq = 88.0;
         return {
