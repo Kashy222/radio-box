@@ -246,8 +246,8 @@
 
 /* Station Title Container */
 .lcd-station-title-box {
-  padding: 4px 12px;
-  max-width: 200px;
+  padding: 4px 0;
+  width: 100%;
   margin: 0 auto;
   text-align: center;
   box-sizing: border-box;
@@ -1165,11 +1165,12 @@
   background-color: #1c1510;
   border-radius: 1px;
   opacity: 0.15;
+  flex-shrink: 0;
 }
 .cross-active {
-  animation: signalSweep 1s infinite linear;
+  animation: signalSweep 1.5s infinite linear;
 }
 @keyframes signalSweep {
-  0%, 100% { opacity: 0.15; transform: scale(0.8); }
-  50% { opacity: 1; transform: scale(1.1); }
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 1; }
 }
