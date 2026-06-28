@@ -1032,7 +1032,7 @@ function App() {
                   <div className="lcd-digits-container">
                     {(isSignalLost || isOffline) ? (
                       <span className="lcd-freq-numbers" style={{ letterSpacing: '4px' }}>
-                        X_X
+                        -_-
                       </span>
                     ) : (
                       <>
