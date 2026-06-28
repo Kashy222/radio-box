@@ -1024,7 +1024,7 @@ function App() {
                           {[...Array(3)].map((_, row) => (
                             <div key={row} className="tuning-row" style={{ minWidth: 'max-content' }}>
                               {[...Array(40)].map((_, col) => (
-                                <div key={col} className="tuning-dot" style={{ opacity: (col / 40) <= volume ? 1 : 0.15 }}></div>
+                                <div key={col} className="tuning-dot" style={{ opacity: (col / 40) < volume ? 1 : 0.15 }}></div>
                               ))}
                             </div>
                           ))}
