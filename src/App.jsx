@@ -158,7 +158,8 @@ function App() {
   const [volume, setVolume] = useState(0.8);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isScraping, setIsScraping] = useState(false);
-  const [isBuffering, setIsBuffering] = useState(false); // Track if audio is currently buffering
+  const [isBuffering, setIsBuffering] = useState(false);
+  const [isSeeking, setIsSeeking] = useState(false);
   const [scrambleOffset, setScrambleOffset] = useState(0);
   const [isSignalLost, setIsSignalLost] = useState(false);
   const [isOffline, setIsOffline] = useState(typeof navigator !== 'undefined' ? !navigator.onLine : false);
@@ -238,7 +239,7 @@ function App() {
   // Auto skip logic if buffering fails
   useEffect(() => {
     let timeoutId;
-    if (isBuffering && isPlaying && isPowerOn) {
+    if (isSeeking && isPlaying && isPowerOn) {
       timeoutId = setTimeout(() => {
         if (tuningDirectionRef.current === -1 && skipPrevRef.current) {
           skipPrevRef.current();
@@ -252,21 +253,20 @@ function App() {
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [isBuffering, isPlaying, isPowerOn]);
+  }, [isSeeking, isPlaying, isPowerOn]);
 
-  // Scramble frequency effect when buffering
+  // Scramble frequency slightly when seeking to simulate analog tuning search
   useEffect(() => {
     let interval;
-    if (isBuffering && isPlaying && isPowerOn && !isOffline && !isSignalLost) {
+    if (isSeeking && isPlaying && isPowerOn && !isOffline && !isSignalLost) {
       interval = setInterval(() => {
-        // Generate random offset between -0.45 and +0.45
-        setScrambleOffset((Math.random() * 0.9) - 0.45);
-      }, 70); // Scramble rapidly every 70ms
+        setScrambleOffset((Math.random() - 0.5) * 0.4);
+      }, 50);
     } else {
       setScrambleOffset(0);
     }
     return () => clearInterval(interval);
-  }, [isBuffering, isPlaying, isPowerOn]);
+  }, [isSeeking, isPlaying, isPowerOn, isOffline, isSignalLost]);
 
   const audioRef = useRef(null);
   const dragItem = useRef(null);
@@ -414,8 +414,14 @@ function App() {
     audio.crossOrigin = "anonymous";
     audio.addEventListener('loadstart', () => setIsBuffering(true));
     audio.addEventListener('waiting', () => setIsBuffering(true));
-    audio.addEventListener('playing', () => setIsBuffering(false));
-    audio.addEventListener('canplay', () => setIsBuffering(false));
+    audio.addEventListener('playing', () => {
+      setIsBuffering(false);
+      setIsSeeking(false);
+    });
+    audio.addEventListener('canplay', () => {
+      setIsBuffering(false);
+      setIsSeeking(false);
+    });
     audioRef.current = audio;
   }
 
@@ -733,6 +739,7 @@ function App() {
   const handlePrevStation = () => {
     if (!isPowerOn || stationFrequencies.length === 0) return;
     setTuningDirection(-1);
+    setIsSeeking(true);
     const currentIndex = stationFrequencies.findIndex(s => s.stationuuid === currentStation?.stationuuid);
     let prevIndex = currentIndex - 1;
     if (prevIndex < 0) prevIndex = stationFrequencies.length - 1;
@@ -745,6 +752,7 @@ function App() {
   const handleNextStation = () => {
     if (!isPowerOn || stationFrequencies.length === 0) return;
     setTuningDirection(1);
+    setIsSeeking(true);
     const currentIndex = stationFrequencies.findIndex(s => s.stationuuid === currentStation?.stationuuid);
     let nextIndex = currentIndex + 1;
     if (nextIndex >= stationFrequencies.length) nextIndex = 0;
@@ -833,8 +841,11 @@ function App() {
     const percent = (newAngle + 135) / 270;
     const newFreq = MIN_FREQ + (percent * (MAX_FREQ - MIN_FREQ));
     const snapped = Math.round(newFreq * 10) / 10;
-    setFrequency(snapped);
-    initAudioContext();
+    if (snapped !== frequency) {
+      setFrequency(snapped);
+      setIsSeeking(true);
+      initAudioContext();
+    }
   };
 
   useEffect(() => {
@@ -950,6 +961,7 @@ function App() {
 
   const handleSelectSaved = (freq) => {
     setFrequency(freq);
+    setIsSeeking(true);
     setIsMenuOpen(false);
     initAudioContext();
   };
