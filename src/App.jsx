@@ -1068,9 +1068,11 @@ function App() {
             <div className="info-modal-header-centered">
               <img src="/nostalgia_logo.png" alt="Radio Nostalgia" className="info-logo-large" />
             </div>
-            <p className="info-desc">
-              Experience the magic of classic FM radio with a beautifully tactile, skeuomorphic design. Tune in to your favorite regional stations with authentic analog feel.
-            </p>
+            <div className="info-desc">
+              <a href="https://x.com/dondon0don" target="_blank" rel="noopener noreferrer">https://x.com/dondon0don</a>
+              <br />
+              <a href="https://github.com/Kashy222" target="_blank" rel="noopener noreferrer">https://github.com/Kashy222</a>
+            </div>
             
             <div className="changelog-container">
               <div className="changelog-header-text">Changelog</div>

@@ -1223,8 +1223,8 @@
   border: 1px solid #1a1b1e;
   width: 100%;
   max-width: 380px;
-  max-height: 90vh;
-  padding: 30px;
+  height: 600px;
+  padding: 20px;
   position: relative;
   box-shadow: 
     0 25px 60px rgba(0, 0, 0, 0.9),
@@ -1278,10 +1278,21 @@
 
 .info-desc {
   font-size: 0.9rem;
-  line-height: 1.5;
+  line-height: 1.8;
   color: #b0b0b0;
   margin-bottom: 20px;
   text-shadow: none;
+}
+
+.info-desc a {
+  color: #fca311;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.info-desc a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
 }
 
 .changelog-container {
