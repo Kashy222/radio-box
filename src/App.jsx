@@ -1021,26 +1021,30 @@ function App() {
               <div className="changelog-item">
                 <span className="version">v3 (Latest)</span>
                 <ul>
-                  <li>Removed auto-skip and continuous scrambling</li>
-                  <li>Added analog-style smooth scrolling animation between stations</li>
-                  <li>Fixed skipped arrows when dialing manually</li>
-                  <li>Introduced Info modal & changelog</li>
+                  <li>Removed auto-skip timeout and continuous frequency scrambling</li>
+                  <li>Added analog-style smooth scrolling animation when skipping stations</li>
+                  <li>Fine-tuned sweep scrolling speed to match a realistic dial sweep</li>
+                  <li>Fixed manual tuning skip arrows to calculate skips dynamically off the slider's exact raw frequency instead of the snapping station</li>
+                  <li>Bugfix: Reset isSeeking internal state when releasing the tuning knob to re-enable arrow skipping</li>
+                  <li>Introduced Info modal & granular changelog</li>
                 </ul>
               </div>
               <div className="changelog-item">
                 <span className="version">v2</span>
                 <ul>
-                  <li>Implemented region-based FM station filtering</li>
-                  <li>Added robust geolocation for fetching local stations</li>
-                  <li>Improved audio stream loading reliability</li>
+                  <li>Dynamic stream filtering: Decoupled active station seeking from passive buffering and blocked injected streams (zeno.fm)</li>
+                  <li>Refined dot-matrix LCD typography: Fixed text truncation, accurate volume bar dots scaling, and stretched tuning grids to full width</li>
+                  <li>UX Enhancements: Engineered a moving "*_*" and "-_-" offline/no-signal indicator animation when streams disconnect</li>
+                  <li>Robust state management: Added auto-resume of audio streams upon internet reconnection</li>
+                  <li>Complete UI animations: Built the power-off collapse effect and authentic loading/buffering LCD screens</li>
                 </ul>
               </div>
               <div className="changelog-item">
                 <span className="version">v1</span>
                 <ul>
-                  <li>Initial release with fully skeuomorphic UI</li>
-                  <li>Added rotating tuning knob and volume controls</li>
-                  <li>Integrated digital LCD screen for frequency display</li>
+                  <li>Initial architecture and design of the fully skeuomorphic UI</li>
+                  <li>Mathematical mappings for rotating tuning knobs and volume controls to stream parameters</li>
+                  <li>Integrated a classic digital LCD screen for frequency rendering</li>
                 </ul>
               </div>
             </div>
