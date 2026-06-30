@@ -86,8 +86,7 @@ const CHANGELOG_DATA = [
       "Added analog-style smooth scrolling animation when skipping stations",
       "Fine-tuned sweep scrolling speed to match a realistic dial sweep",
       "Fixed manual tuning skip arrows to calculate skips dynamically off the slider's exact raw frequency instead of the snapping station",
-      "Bugfix: Reset isSeeking internal state when releasing the tuning knob to re-enable arrow skipping",
-      "Introduced Info modal & granular changelog"
+      "Bugfix: Reset isSeeking internal state when releasing the tuning knob to re-enable arrow skipping"
     ]
   }
 ];
