@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Capacitor, registerPlugin } from '@capacitor/core';
-import { Play, Pause, Power, SkipBack, SkipForward, Maximize, Minimize } from 'lucide-react';
+import { Play, Pause, Power, SkipBack, SkipForward, Maximize, Minimize, Info, X } from 'lucide-react';
 import { Analytics } from "@vercel/analytics/react";
 import { getClosestHubCity } from './utils/geo';
 import './App.css';
@@ -165,6 +165,7 @@ function App() {
   const [noSignalOffset, setNoSignalOffset] = useState(0);
   const [isVolumeChanging, setIsVolumeChanging] = useState(false);
   const [isPoweringOff, setIsPoweringOff] = useState(false);
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const volumeTimeoutRef = useRef(null);
   const [tuningDirection, setTuningDirection] = useState(1);
   const skipNextRef = useRef(null);
@@ -997,6 +998,56 @@ function App() {
 
   return (
     <div className="modern-retro-player-wrapper">
+      <button className="info-btn" onClick={() => setIsInfoModalOpen(true)} aria-label="Info">
+        <Info size={24} />
+      </button>
+
+      {isInfoModalOpen && (
+        <div className="info-modal-overlay" onClick={() => setIsInfoModalOpen(false)}>
+          <div className="info-modal-content" onClick={e => e.stopPropagation()}>
+            <button className="close-btn" onClick={() => setIsInfoModalOpen(false)}>
+              <X size={24} />
+            </button>
+            <div className="info-modal-header">
+              <img src="/nostalgia_logo.png" alt="Radio Nostalgia" className="info-logo" />
+              <h2>Radio Nostalgia</h2>
+            </div>
+            <p className="info-desc">
+              Experience the magic of classic FM radio with a beautifully tactile, skeuomorphic design. Tune in to your favorite regional stations with authentic analog feel.
+            </p>
+            
+            <div className="changelog">
+              <h3>Changelog</h3>
+              <div className="changelog-item">
+                <span className="version">v3 (Latest)</span>
+                <ul>
+                  <li>Removed auto-skip and continuous scrambling</li>
+                  <li>Added analog-style smooth scrolling animation between stations</li>
+                  <li>Fixed skipped arrows when dialing manually</li>
+                  <li>Introduced Info modal & changelog</li>
+                </ul>
+              </div>
+              <div className="changelog-item">
+                <span className="version">v2</span>
+                <ul>
+                  <li>Implemented region-based FM station filtering</li>
+                  <li>Added robust geolocation for fetching local stations</li>
+                  <li>Improved audio stream loading reliability</li>
+                </ul>
+              </div>
+              <div className="changelog-item">
+                <span className="version">v1</span>
+                <ul>
+                  <li>Initial release with fully skeuomorphic UI</li>
+                  <li>Added rotating tuning knob and volume controls</li>
+                  <li>Integrated digital LCD screen for frequency display</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="player-body">
         
         <div className="player-upper-block">
