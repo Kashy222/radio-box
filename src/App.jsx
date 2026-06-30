@@ -28,15 +28,15 @@ const DEFAULT_STATIONS = [
 ];
 
 const MUMBAI_STATIONS = [
-  { freq: 91.1, name: 'Radio City Mumbai', url_resolved: 'https://drive.uber.radio/uber/bollywood2000s/icecast.audio', stationuuid: 'mum-rc-911' },
-  { freq: 92.7, name: 'BIG FM Mumbai', url_resolved: 'https://drive.uber.radio/uber/bollywood2010s/icecast.audio', stationuuid: 'mum-big-927' },
-  { freq: 93.5, name: 'Red FM Mumbai', url_resolved: 'https://funasia.streamguys1.com/live9', stationuuid: 'mum-red-935' },
-  { freq: 94.3, name: 'Radio One Mumbai', url_resolved: 'https://strmreg.1.fm/bombaybeats_mobile_mp3', stationuuid: 'mum-ro-943' },
-  { freq: 98.3, name: 'Radio Mirchi Mumbai', url_resolved: 'https://eu8.fastcast4u.com/proxy/clyedupq/stream', stationuuid: 'mum-rm-983' },
+  { freq: 91.1, name: 'Radio City', url_resolved: 'https://drive.uber.radio/uber/bollywood2000s/icecast.audio', stationuuid: 'mum-rc-911' },
+  { freq: 92.7, name: 'BIG FM', url_resolved: 'https://drive.uber.radio/uber/bollywood2010s/icecast.audio', stationuuid: 'mum-big-927' },
+  { freq: 93.5, name: 'Red FM', url_resolved: 'https://funasia.streamguys1.com/live9', stationuuid: 'mum-red-935' },
+  { freq: 94.3, name: 'Radio One', url_resolved: 'https://strmreg.1.fm/bombaybeats_mobile_mp3', stationuuid: 'mum-ro-943' },
+  { freq: 98.3, name: 'Radio Mirchi', url_resolved: 'https://eu8.fastcast4u.com/proxy/clyedupq/stream', stationuuid: 'mum-rm-983' },
   { freq: 100.1, name: 'AIR FM Gold', url_resolved: 'https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio005/hlspbaudio00564kbps.m3u8', stationuuid: 'mum-gold-1001' },
   { freq: 102.8, name: 'Vividh Bharati', url_resolved: 'https://air.pc.cdn.bitgravity.com/air/live/pbaudio001/playlist.m3u8', stationuuid: 'mum-vb-1028' },
-  { freq: 104.0, name: 'Fever FM Mumbai', url_resolved: 'https://radio.canstream.co.uk:8115/live.mp3', stationuuid: 'mum-fever-1040' },
-  { freq: 104.8, name: 'Ishq FM Mumbai', url_resolved: 'https://drive.uber.radio/uber/bollywoodnow/icecast.audio', stationuuid: 'mum-ishq-1048' },
+  { freq: 104.0, name: 'Fever FM', url_resolved: 'https://radio.canstream.co.uk:8115/live.mp3', stationuuid: 'mum-fever-1040' },
+  { freq: 104.8, name: 'Ishq FM', url_resolved: 'https://drive.uber.radio/uber/bollywoodnow/icecast.audio', stationuuid: 'mum-ishq-1048' },
   { freq: 107.1, name: 'AIR FM Rainbow', url_resolved: 'https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio002/hlspbaudio002_Auto.m3u8', stationuuid: 'mum-rainbow-1071' }
 ];
 
