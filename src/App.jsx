@@ -739,10 +739,10 @@ function App() {
     if (!isPowerOn || stationFrequencies.length === 0 || isSeeking) return;
     setTuningDirection(-1);
     setIsSeeking(true);
-    const currentIndex = stationFrequencies.findIndex(s => s.stationuuid === currentStation?.stationuuid);
-    let prevIndex = currentIndex - 1;
-    if (prevIndex < 0) prevIndex = stationFrequencies.length - 1;
-    const prevStation = stationFrequencies[prevIndex];
+    
+    const sorted = [...stationFrequencies].sort((a, b) => a.freq - b.freq);
+    const prevStation = [...sorted].reverse().find(s => s.freq < frequency - 0.05) || sorted[sorted.length - 1];
+    
     initAudioContext();
     animateFrequencySweep(frequency, prevStation.freq, -1, prevStation);
   };
@@ -751,10 +751,10 @@ function App() {
     if (!isPowerOn || stationFrequencies.length === 0 || isSeeking) return;
     setTuningDirection(1);
     setIsSeeking(true);
-    const currentIndex = stationFrequencies.findIndex(s => s.stationuuid === currentStation?.stationuuid);
-    let nextIndex = currentIndex + 1;
-    if (nextIndex >= stationFrequencies.length) nextIndex = 0;
-    const nextStation = stationFrequencies[nextIndex];
+    
+    const sorted = [...stationFrequencies].sort((a, b) => a.freq - b.freq);
+    const nextStation = sorted.find(s => s.freq > frequency + 0.05) || sorted[0];
+    
     initAudioContext();
     animateFrequencySweep(frequency, nextStation.freq, 1, nextStation);
   };
