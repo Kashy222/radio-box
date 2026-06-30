@@ -1069,10 +1069,6 @@ function App() {
 
   return (
     <div className="modern-retro-player-wrapper">
-      <button className="info-btn" onClick={() => setIsInfoModalOpen(true)} aria-label="Info">
-        <span className="info-icon-text">i</span>
-      </button>
-
       {isInfoModalOpen && (
         <div className="info-modal-overlay" onClick={() => setIsInfoModalOpen(false)}>
           <div className="info-modal-content" onClick={e => e.stopPropagation()}>
@@ -1121,7 +1117,12 @@ function App() {
         <div className="player-upper-block">
           {/* HEADER BAR: Philips Logo & Brushed Power Button */}
           <div className="radio-header-bar">
-            <div className="nostalgia-logo-wrapper">
+            <div 
+              className="nostalgia-logo-wrapper" 
+              onClick={() => setIsInfoModalOpen(true)}
+              style={{ cursor: 'pointer' }}
+              title="About Radio Nostalgia"
+            >
               <img src="/nostalgia_logo.png" alt="Radio Nostalgia Logo" className="nostalgia-wordmark-logo" />
             </div>
 
