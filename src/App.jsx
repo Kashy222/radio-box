@@ -65,6 +65,7 @@ const CHANGELOG_DATA = [
     items: [
       "Initial architecture of the fully skeuomorphic Radio Nostalgia UI, drawing inspiration from classic analog receivers",
       "Engineered mathematical mappings that seamlessly translate tactile tuning knob rotations into dynamic audio stream parameters",
+      "Integrated the open-source RadioBrowser API to dynamically fetch and stream real-world live radio stations",
       "Integrated a nostalgic, dot-matrix digital LCD screen for frequency rendering with an authentic amber glow",
       "Built a custom, responsive layout designed specifically to feel like a physical device sitting on your desk"
     ]
@@ -74,6 +75,8 @@ const CHANGELOG_DATA = [
     id: 'v2',
     date: 'June 29, 2026',
     items: [
+      "Global Region Selector: Implemented a dedicated region and city selector interface, enabling users to tune into authentic local broadcasts worldwide",
+      "Custom Asset Integration: Added localized flag icons and organized city-based sub-menus for effortless global navigation",
       "Dynamic stream filtering: Decoupled active station seeking from passive buffering to dramatically improve the responsiveness of the tuning dial",
       "Refined dot-matrix typography: Solved text truncation issues, implemented accurate volume bar scaling, and stretched tuning grids for a wide-screen feel",
       "UX Enhancements: Engineered a moving \"*_*\" and \"-_-\" offline/no-signal indicator animation that breathes life into disconnected states",
@@ -90,6 +93,7 @@ const CHANGELOG_DATA = [
       "Added an analog-style, buttery smooth scrolling animation when jumping between stations for a highly tactile feel",
       "Fine-tuned the sweep scrolling speed to perfectly mirror the physics and resistance of a real-world tuning dial",
       "Overhauled manual tuning arrows to calculate skips dynamically off the slider's exact raw frequency instead of relying on snapping anchor points",
+      "UX Polish: Reduced default startup volume to 35% to prevent startling blasts of loud audio upon initialization",
       "Bugfix: Implemented a strict pointer-up state reset on the tuning knob, permanently eliminating the stuck 'seeking' bug that disabled arrow buttons",
       "Introduced a highly polished, glassmorphic Info & Changelog modal tightly integrated into the dark UI aesthetic"
     ]
