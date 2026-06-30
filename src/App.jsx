@@ -1121,7 +1121,7 @@ function App() {
               className="nostalgia-logo-wrapper" 
               onClick={() => setIsInfoModalOpen(true)}
               style={{ cursor: 'pointer' }}
-              title="About Radio Nostalgia"
+              title="Psst... try clicking me"
             >
               <img src="/nostalgia_logo.png" alt="Radio Nostalgia Logo" className="nostalgia-wordmark-logo" />
             </div>
