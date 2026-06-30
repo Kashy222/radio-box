@@ -1223,8 +1223,9 @@
   border: 1px solid #1a1b1e;
   width: 100%;
   max-width: 380px;
-  height: 520px;
+  height: 540px;
   padding: 20px;
+  padding-bottom: 30px;
   position: relative;
   box-shadow: 
     0 25px 60px rgba(0, 0, 0, 0.9),
@@ -1346,8 +1347,9 @@
   flex: 1;
   overflow-y: auto;
   min-height: 150px;
-  max-height: 250px;
+  max-height: 270px;
   padding-right: 10px;
+  padding-bottom: 20px;
 }
 
 .changelog-tab-content::-webkit-scrollbar {
