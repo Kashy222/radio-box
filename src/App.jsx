@@ -155,7 +155,7 @@ function App() {
   const [currentStation, setCurrentStation] = useState(DEFAULT_STATIONS[3]); // Red FM 93.5 as default
   
   const [frequency, setFrequency] = useState(93.5); // Start at 93.5 FM
-  const [volume, setVolume] = useState(0.8);
+  const [volume, setVolume] = useState(0.35);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isScraping, setIsScraping] = useState(false);
   const [isBuffering, setIsBuffering] = useState(false);
