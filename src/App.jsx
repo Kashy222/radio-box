@@ -201,6 +201,27 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [selectedRegionId, setSelectedRegionId] = useState(null);
+  const [hubCity, setHubCity] = useState(null);
+
+  // Migrate old saved stations with "Mumbai" suffix
+  useEffect(() => {
+    setSavedStations(prev => {
+      let migrated = false;
+      const newStations = prev.map(station => {
+        if (station && station.name && station.name.endsWith(' Mumbai')) {
+          migrated = true;
+          return { ...station, name: station.name.replace(' Mumbai', '') };
+        }
+        return station;
+      });
+      
+      if (migrated) {
+        localStorage.setItem('radioSavedStations', JSON.stringify(newStations));
+        return newStations;
+      }
+      return prev;
+    });
+  }, []);
   const [geoCity, setGeoCity] = useState(null);
   const [geoCountryCode, setGeoCountryCode] = useState(null);
 
