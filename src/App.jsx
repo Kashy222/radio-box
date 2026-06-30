@@ -59,15 +59,12 @@ const REGIONS = [
 
 const CHANGELOG_DATA = [
   {
-    version: 'v3 (Latest)',
-    id: 'v3',
+    version: 'v1',
+    id: 'v1',
     items: [
-      "Removed auto-skip timeout and continuous frequency scrambling",
-      "Added analog-style smooth scrolling animation when skipping stations",
-      "Fine-tuned sweep scrolling speed to match a realistic dial sweep",
-      "Fixed manual tuning skip arrows to calculate skips dynamically off the slider's exact raw frequency instead of the snapping station",
-      "Bugfix: Reset isSeeking internal state when releasing the tuning knob to re-enable arrow skipping",
-      "Introduced Info modal & granular changelog"
+      "Initial architecture and design of the fully skeuomorphic UI",
+      "Mathematical mappings for rotating tuning knobs and volume controls to stream parameters",
+      "Integrated a classic digital LCD screen for frequency rendering"
     ]
   },
   {
@@ -82,12 +79,15 @@ const CHANGELOG_DATA = [
     ]
   },
   {
-    version: 'v1',
-    id: 'v1',
+    version: 'v3 (Latest)',
+    id: 'v3',
     items: [
-      "Initial architecture and design of the fully skeuomorphic UI",
-      "Mathematical mappings for rotating tuning knobs and volume controls to stream parameters",
-      "Integrated a classic digital LCD screen for frequency rendering"
+      "Removed auto-skip timeout and continuous frequency scrambling",
+      "Added analog-style smooth scrolling animation when skipping stations",
+      "Fine-tuned sweep scrolling speed to match a realistic dial sweep",
+      "Fixed manual tuning skip arrows to calculate skips dynamically off the slider's exact raw frequency instead of the snapping station",
+      "Bugfix: Reset isSeeking internal state when releasing the tuning knob to re-enable arrow skipping",
+      "Introduced Info modal & granular changelog"
     ]
   }
 ];
@@ -237,7 +237,7 @@ function App() {
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [selectedRegionId, setSelectedRegionId] = useState(null);
   const [hubCity, setHubCity] = useState(null);
-  const [activeTab, setActiveTab] = useState('v3');
+  const [activeTab, setActiveTab] = useState('v1');
 
   // Migrate old saved stations with "Mumbai" suffix
   useEffect(() => {
