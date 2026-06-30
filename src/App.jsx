@@ -63,11 +63,11 @@ const CHANGELOG_DATA = [
     id: 'v1',
     date: 'June 23, 2026',
     items: [
-      "Initial architecture of the fully skeuomorphic Radio Nostalgia UI, drawing inspiration from classic analog receivers",
-      "Engineered mathematical mappings that seamlessly translate tactile tuning knob rotations into dynamic audio stream parameters",
-      "Integrated the open-source RadioBrowser API to dynamically fetch and stream real-world live radio stations",
-      "Integrated a nostalgic, dot-matrix digital LCD screen for frequency rendering with an authentic amber glow",
-      "Built a custom, responsive layout designed specifically to feel like a physical device sitting on your desk"
+      "Initial architecture of the skeuomorphic Radio Nostalgia UI",
+      "Mapped tactile tuning knob rotations into dynamic audio controls",
+      "Integrated RadioBrowser API to fetch real-world live stations",
+      "Added nostalgic dot-matrix LCD screen with amber glow",
+      "Built a responsive layout designed to feel like a physical device"
     ]
   },
   {
@@ -75,13 +75,13 @@ const CHANGELOG_DATA = [
     id: 'v2',
     date: 'June 27, 2026',
     items: [
-      "Global Region Selector: Implemented a dedicated region and city selector interface, enabling users to tune into authentic local broadcasts worldwide",
-      "Custom Asset Integration: Added localized flag icons and organized city-based sub-menus for effortless global navigation",
-      "Dynamic stream filtering: Decoupled active station seeking from passive buffering to dramatically improve the responsiveness of the tuning dial",
-      "Refined dot-matrix typography: Solved text truncation issues, implemented accurate volume bar scaling, and stretched tuning grids for a wide-screen feel",
-      "UX Enhancements: Engineered a moving \"*_*\" and \"-_-\" offline/no-signal indicator animation that breathes life into disconnected states",
-      "Robust State Management: Implemented auto-resume logic to instantly reconnect audio streams following network interruptions",
-      "Skeuomorphic Animations: Hand-crafted a realistic power-off CRT collapse effect and authentic loading/buffering states for the LCD"
+      "Region Selector: Tune into authentic local broadcasts worldwide",
+      "Custom Assets: Added localized flag icons and city sub-menus",
+      "Stream Filtering: Decoupled seeking from buffering for faster tuning",
+      "Typography: Fixed truncation, accurate volume bars, and wider grids",
+      "UX Polish: Added animated offline and no-signal indicators",
+      "State Management: Auto-resume logic for network interruptions",
+      "Animations: Hand-crafted CRT collapse and LCD buffering states"
     ]
   },
   {
@@ -89,12 +89,12 @@ const CHANGELOG_DATA = [
     id: 'v3',
     date: 'June 30, 2026',
     items: [
-      "Removed the rigid auto-skip timeout and continuous frequency scrambling, empowering users with complete, unhindered manual tuning control",
-      "Added an analog-style, buttery smooth scrolling animation when jumping between stations for a highly tactile feel",
-      "Fine-tuned the sweep scrolling speed to perfectly mirror the physics and resistance of a real-world tuning dial",
-      "Overhauled manual tuning arrows to calculate skips dynamically off the slider's exact raw frequency instead of relying on snapping anchor points",
-      "UX Polish: Reduced default startup volume to 35% to prevent startling blasts of loud audio upon initialization",
-      "Bugfix: Implemented a strict pointer-up state reset on the tuning knob, permanently eliminating the stuck 'seeking' bug that disabled arrow buttons"
+      "Removed rigid auto-skips for complete, unhindered manual tuning",
+      "Added buttery smooth scrolling animations when jumping stations",
+      "Fine-tuned sweep speed to mirror real-world tuning dial physics",
+      "Overhauled manual arrows to calculate skips dynamically off raw frequency",
+      "UX Polish: Reduced startup volume to 35% to prevent loud audio blasts",
+      "Bugfix: Eliminated the stuck 'seeking' bug that disabled arrow buttons"
     ]
   }
 ];
