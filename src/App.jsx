@@ -57,6 +57,41 @@ const REGIONS = [
   { id: 'AU', code: 'AU', name: 'Oceania', flagUrl: '/images/Oceania.svg' },
 ];
 
+const CHANGELOG_DATA = [
+  {
+    version: 'v3 (Latest)',
+    id: 'v3',
+    items: [
+      "Removed auto-skip timeout and continuous frequency scrambling",
+      "Added analog-style smooth scrolling animation when skipping stations",
+      "Fine-tuned sweep scrolling speed to match a realistic dial sweep",
+      "Fixed manual tuning skip arrows to calculate skips dynamically off the slider's exact raw frequency instead of the snapping station",
+      "Bugfix: Reset isSeeking internal state when releasing the tuning knob to re-enable arrow skipping",
+      "Introduced Info modal & granular changelog"
+    ]
+  },
+  {
+    version: 'v2',
+    id: 'v2',
+    items: [
+      "Dynamic stream filtering: Decoupled active station seeking from passive buffering and blocked injected streams (zeno.fm)",
+      "Refined dot-matrix LCD typography: Fixed text truncation, accurate volume bar dots scaling, and stretched tuning grids to full width",
+      "UX Enhancements: Engineered a moving \"*_*\" and \"-_-\" offline/no-signal indicator animation when streams disconnect",
+      "Robust state management: Added auto-resume of audio streams upon internet reconnection",
+      "Complete UI animations: Built the power-off collapse effect and authentic loading/buffering LCD screens"
+    ]
+  },
+  {
+    version: 'v1',
+    id: 'v1',
+    items: [
+      "Initial architecture and design of the fully skeuomorphic UI",
+      "Mathematical mappings for rotating tuning knobs and volume controls to stream parameters",
+      "Integrated a classic digital LCD screen for frequency rendering"
+    ]
+  }
+];
+
 const fetchRegionalStations = async (countryCode, cityName) => {
   if (countryCode === 'IN') {
     if (cityName === 'Mumbai' || cityName === 'Pune') {
@@ -202,6 +237,7 @@ function App() {
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [selectedRegionId, setSelectedRegionId] = useState(null);
   const [hubCity, setHubCity] = useState(null);
+  const [activeTab, setActiveTab] = useState('v3');
 
   // Migrate old saved stations with "Mumbai" suffix
   useEffect(() => {
@@ -1029,43 +1065,33 @@ function App() {
             <button className="close-btn" onClick={() => setIsInfoModalOpen(false)}>
               <X size={24} />
             </button>
-            <div className="info-modal-header">
-              <img src="/nostalgia_logo.png" alt="Radio Nostalgia" className="info-logo" />
-              <h2>Radio Nostalgia</h2>
+            <div className="info-modal-header-centered">
+              <img src="/nostalgia_logo.png" alt="Radio Nostalgia" className="info-logo-large" />
             </div>
             <p className="info-desc">
               Experience the magic of classic FM radio with a beautifully tactile, skeuomorphic design. Tune in to your favorite regional stations with authentic analog feel.
             </p>
             
-            <div className="changelog">
-              <h3>Changelog</h3>
-              <div className="changelog-item">
-                <span className="version">v3 (Latest)</span>
-                <ul>
-                  <li>Removed auto-skip timeout and continuous frequency scrambling</li>
-                  <li>Added analog-style smooth scrolling animation when skipping stations</li>
-                  <li>Fine-tuned sweep scrolling speed to match a realistic dial sweep</li>
-                  <li>Fixed manual tuning skip arrows to calculate skips dynamically off the slider's exact raw frequency instead of the snapping station</li>
-                  <li>Bugfix: Reset isSeeking internal state when releasing the tuning knob to re-enable arrow skipping</li>
-                  <li>Introduced Info modal & granular changelog</li>
-                </ul>
+            <div className="changelog-container">
+              <div className="changelog-header-text">Changelog</div>
+              
+              <div className="changelog-tabs">
+                {CHANGELOG_DATA.map(tab => (
+                  <button 
+                    key={tab.id}
+                    className={`changelog-tab ${activeTab === tab.id ? 'active' : ''}`}
+                    onClick={() => setActiveTab(tab.id)}
+                  >
+                    {tab.version}
+                  </button>
+                ))}
               </div>
-              <div className="changelog-item">
-                <span className="version">v2</span>
+
+              <div className="changelog-tab-content">
                 <ul>
-                  <li>Dynamic stream filtering: Decoupled active station seeking from passive buffering and blocked injected streams (zeno.fm)</li>
-                  <li>Refined dot-matrix LCD typography: Fixed text truncation, accurate volume bar dots scaling, and stretched tuning grids to full width</li>
-                  <li>UX Enhancements: Engineered a moving "*_*" and "-_-" offline/no-signal indicator animation when streams disconnect</li>
-                  <li>Robust state management: Added auto-resume of audio streams upon internet reconnection</li>
-                  <li>Complete UI animations: Built the power-off collapse effect and authentic loading/buffering LCD screens</li>
-                </ul>
-              </div>
-              <div className="changelog-item">
-                <span className="version">v1</span>
-                <ul>
-                  <li>Initial architecture and design of the fully skeuomorphic UI</li>
-                  <li>Mathematical mappings for rotating tuning knobs and volume controls to stream parameters</li>
-                  <li>Integrated a classic digital LCD screen for frequency rendering</li>
+                  {CHANGELOG_DATA.find(t => t.id === activeTab).items.map((item, idx) => (
+                    <li key={idx}>{item}</li>
+                  ))}
                 </ul>
               </div>
             </div>
