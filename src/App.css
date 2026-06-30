@@ -92,7 +92,7 @@
     rgba(255, 255, 255, 0) 100%
   );
   background-size: 200% 100%;
-  animation: shine-sweep 8s infinite linear;
+  animation: shine-sweep 12s infinite linear;
   -webkit-mask-image: url('/nostalgia_logo.png');
   -webkit-mask-size: 100% 100%;
   -webkit-mask-repeat: no-repeat;
@@ -104,7 +104,7 @@
 
 @keyframes shine-sweep {
   0% { background-position: 200% center; }
-  20% { background-position: -100% center; }
+  35% { background-position: -100% center; }
   100% { background-position: -100% center; }
 }
 
