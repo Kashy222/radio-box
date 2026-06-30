@@ -857,7 +857,10 @@ function App() {
 
     const handlePointerUp = () => {
       isDraggingVolume.current = false;
-      isDraggingSlider.current = false;
+      if (isDraggingSlider.current) {
+        isDraggingSlider.current = false;
+        setIsSeeking(false);
+      }
     };
 
     window.addEventListener('pointermove', handlePointerMove);
@@ -958,7 +961,6 @@ function App() {
 
   const handleSelectSaved = (freq) => {
     setFrequency(freq);
-    setIsSeeking(true);
     setIsMenuOpen(false);
     initAudioContext();
   };
