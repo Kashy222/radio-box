@@ -61,7 +61,7 @@ const CHANGELOG_DATA = [
   {
     version: 'v1',
     id: 'v1',
-    date: 'June 28, 2026',
+    date: 'June 23, 2026',
     items: [
       "Initial architecture of the fully skeuomorphic Radio Nostalgia UI, drawing inspiration from classic analog receivers",
       "Engineered mathematical mappings that seamlessly translate tactile tuning knob rotations into dynamic audio stream parameters",
@@ -73,7 +73,7 @@ const CHANGELOG_DATA = [
   {
     version: 'v2',
     id: 'v2',
-    date: 'June 29, 2026',
+    date: 'June 27, 2026',
     items: [
       "Global Region Selector: Implemented a dedicated region and city selector interface, enabling users to tune into authentic local broadcasts worldwide",
       "Custom Asset Integration: Added localized flag icons and organized city-based sub-menus for effortless global navigation",
