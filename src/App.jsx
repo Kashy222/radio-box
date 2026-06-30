@@ -160,7 +160,6 @@ function App() {
   const [isScraping, setIsScraping] = useState(false);
   const [isBuffering, setIsBuffering] = useState(false);
   const [isSeeking, setIsSeeking] = useState(false);
-  const [scrambleOffset, setScrambleOffset] = useState(0);
   const [isSignalLost, setIsSignalLost] = useState(false);
   const [isOffline, setIsOffline] = useState(typeof navigator !== 'undefined' ? !navigator.onLine : false);
   const [noSignalOffset, setNoSignalOffset] = useState(0);
@@ -235,38 +234,6 @@ function App() {
     }
     return () => clearInterval(interval);
   }, [isSignalLost, isOffline, isPowerOn]);
-
-  // Auto skip logic if buffering fails
-  useEffect(() => {
-    let timeoutId;
-    if (isSeeking && isPlaying && isPowerOn) {
-      timeoutId = setTimeout(() => {
-        if (tuningDirectionRef.current === -1 && skipPrevRef.current) {
-          skipPrevRef.current();
-        } else if (skipNextRef.current) {
-          skipNextRef.current();
-        }
-      }, 4500); // 4.5s wait
-    } else {
-      setIsSignalLost(false);
-    }
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [isSeeking, isPlaying, isPowerOn]);
-
-  // Scramble frequency slightly when seeking to simulate analog tuning search
-  useEffect(() => {
-    let interval;
-    if (isSeeking && isPlaying && isPowerOn && !isOffline && !isSignalLost) {
-      interval = setInterval(() => {
-        setScrambleOffset((Math.random() - 0.5) * 0.4);
-      }, 50);
-    } else {
-      setScrambleOffset(0);
-    }
-    return () => clearInterval(interval);
-  }, [isSeeking, isPlaying, isPowerOn, isOffline, isSignalLost]);
 
   const audioRef = useRef(null);
   const dragItem = useRef(null);
@@ -994,7 +961,7 @@ function App() {
     return savedStations.findIndex(s => s && Math.abs(s.freq - frequency) < 0.05);
   }, [frequency, savedStations]);
 
-  const displayFreqStr = Math.max(MIN_FREQ, Math.min(MAX_FREQ, frequency + scrambleOffset)).toFixed(2);
+  const displayFreqStr = Math.max(MIN_FREQ, Math.min(MAX_FREQ, frequency)).toFixed(2);
 
   return (
     <div className="modern-retro-player-wrapper">
