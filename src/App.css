@@ -1217,22 +1217,28 @@
 }
 
 .info-modal-content {
-  background-color: #3b3d42;
-  background-image: linear-gradient(180deg, #44464c 0%, #2f3035 100%);
+  background-color: #2b2d31;
+  background-image: linear-gradient(180deg, #33353a 0%, #1f2024 100%);
   border-radius: 20px;
-  border: 1px solid #232427;
+  border: 1px solid #1a1b1e;
   width: 100%;
   max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   padding: 30px;
   position: relative;
   box-shadow: 
-    0 25px 60px rgba(0, 0, 0, 0.8),
-    inset 0 1.5px 2px rgba(255, 255, 255, 0.12),
-    inset 0 -2.5px 4px rgba(0, 0, 0, 0.65);
+    0 25px 60px rgba(0, 0, 0, 0.9),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.08),
+    inset 0 -2.5px 4px rgba(0, 0, 0, 0.8);
   color: #d1d1d1;
   font-family: 'Doto', monospace;
+}
+
+.info-modal-content::-webkit-scrollbar {
+  display: none;
 }
 
 .close-btn {
