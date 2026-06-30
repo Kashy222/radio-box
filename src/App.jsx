@@ -716,7 +716,7 @@ function App() {
     
     let traveled = 0;
     const totalNeeded = Math.abs(totalDist);
-    const step = 0.15; 
+    const step = 0.135; 
 
     sweepIntervalRef.current = setInterval(() => {
       traveled += step;
