@@ -94,8 +94,7 @@ const CHANGELOG_DATA = [
       "Fine-tuned the sweep scrolling speed to perfectly mirror the physics and resistance of a real-world tuning dial",
       "Overhauled manual tuning arrows to calculate skips dynamically off the slider's exact raw frequency instead of relying on snapping anchor points",
       "UX Polish: Reduced default startup volume to 35% to prevent startling blasts of loud audio upon initialization",
-      "Bugfix: Implemented a strict pointer-up state reset on the tuning knob, permanently eliminating the stuck 'seeking' bug that disabled arrow buttons",
-      "Introduced a highly polished, glassmorphic Info & Changelog modal tightly integrated into the dark UI aesthetic"
+      "Bugfix: Implemented a strict pointer-up state reset on the tuning knob, permanently eliminating the stuck 'seeking' bug that disabled arrow buttons"
     ]
   }
 ];
