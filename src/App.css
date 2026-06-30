@@ -1270,8 +1270,8 @@
 }
 
 .info-logo-large {
-  width: 220px;
-  height: 90px;
+  width: 264px;
+  height: 108px;
   object-fit: cover;
   object-position: center;
   border: none;
@@ -1282,7 +1282,7 @@
   font-size: 0.9rem;
   line-height: 1.8;
   color: #b0b0b0;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
   text-shadow: none;
   text-align: center;
 }
