@@ -237,7 +237,7 @@ function App() {
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [selectedRegionId, setSelectedRegionId] = useState(null);
   const [hubCity, setHubCity] = useState(null);
-  const [activeTab, setActiveTab] = useState('v1');
+  const [activeTab, setActiveTab] = useState('v3');
 
   // Migrate old saved stations with "Mumbai" suffix
   useEffect(() => {
@@ -1070,8 +1070,6 @@ function App() {
             </div>
             <div className="info-desc">
               <a href="https://x.com/dondon0don" target="_blank" rel="noopener noreferrer">https://x.com/dondon0don</a>
-              <br />
-              <a href="https://github.com/Kashy222" target="_blank" rel="noopener noreferrer">https://github.com/Kashy222</a>
             </div>
             
             <div className="changelog-container">
