@@ -245,6 +245,13 @@ function App() {
   const [selectedRegionId, setSelectedRegionId] = useState(null);
   const [hubCity, setHubCity] = useState(null);
   const [activeTab, setActiveTab] = useState('v3');
+  const changelogRef = useRef(null);
+
+  useEffect(() => {
+    if (changelogRef.current) {
+      changelogRef.current.scrollTop = 0;
+    }
+  }, [activeTab]);
 
   // Migrate old saved stations with "Mumbai" suffix
   useEffect(() => {
@@ -1094,7 +1101,7 @@ function App() {
                 ))}
               </div>
 
-              <div className="changelog-tab-content">
+              <div className="changelog-tab-content" ref={changelogRef}>
                 <div className="changelog-date">
                   Released: {CHANGELOG_DATA.find(t => t.id === activeTab).date}
                 </div>
