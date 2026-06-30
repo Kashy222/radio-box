@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Capacitor, registerPlugin } from '@capacitor/core';
-import { Play, Pause, Power, SkipBack, SkipForward, Maximize, Minimize, Info, X } from 'lucide-react';
+import { Play, Pause, Power, SkipBack, SkipForward, Maximize, Minimize, X } from 'lucide-react';
 import { Analytics } from "@vercel/analytics/react";
 import { getClosestHubCity } from './utils/geo';
 import './App.css';
@@ -1020,7 +1020,7 @@ function App() {
   return (
     <div className="modern-retro-player-wrapper">
       <button className="info-btn" onClick={() => setIsInfoModalOpen(true)} aria-label="Info">
-        <Info size={24} />
+        <span className="info-icon-text">i</span>
       </button>
 
       {isInfoModalOpen && (
