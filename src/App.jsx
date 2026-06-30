@@ -61,32 +61,37 @@ const CHANGELOG_DATA = [
   {
     version: 'v1',
     id: 'v1',
+    date: 'June 28, 2026',
     items: [
-      "Initial architecture and design of the fully skeuomorphic UI",
-      "Mathematical mappings for rotating tuning knobs and volume controls to stream parameters",
-      "Integrated a classic digital LCD screen for frequency rendering"
+      "Initial architecture of the fully skeuomorphic Radio Nostalgia UI, drawing inspiration from classic analog receivers",
+      "Engineered mathematical mappings that seamlessly translate tactile tuning knob rotations into dynamic audio stream parameters",
+      "Integrated a nostalgic, dot-matrix digital LCD screen for frequency rendering with an authentic amber glow",
+      "Built a custom, responsive layout designed specifically to feel like a physical device sitting on your desk"
     ]
   },
   {
     version: 'v2',
     id: 'v2',
+    date: 'June 29, 2026',
     items: [
-      "Dynamic stream filtering: Decoupled active station seeking from passive buffering and blocked injected streams (zeno.fm)",
-      "Refined dot-matrix LCD typography: Fixed text truncation, accurate volume bar dots scaling, and stretched tuning grids to full width",
-      "UX Enhancements: Engineered a moving \"*_*\" and \"-_-\" offline/no-signal indicator animation when streams disconnect",
-      "Robust state management: Added auto-resume of audio streams upon internet reconnection",
-      "Complete UI animations: Built the power-off collapse effect and authentic loading/buffering LCD screens"
+      "Dynamic stream filtering: Decoupled active station seeking from passive buffering to dramatically improve the responsiveness of the tuning dial",
+      "Refined dot-matrix typography: Solved text truncation issues, implemented accurate volume bar scaling, and stretched tuning grids for a wide-screen feel",
+      "UX Enhancements: Engineered a moving \"*_*\" and \"-_-\" offline/no-signal indicator animation that breathes life into disconnected states",
+      "Robust State Management: Implemented auto-resume logic to instantly reconnect audio streams following network interruptions",
+      "Skeuomorphic Animations: Hand-crafted a realistic power-off CRT collapse effect and authentic loading/buffering states for the LCD"
     ]
   },
   {
     version: 'v3 (Latest)',
     id: 'v3',
+    date: 'June 30, 2026',
     items: [
-      "Removed auto-skip timeout and continuous frequency scrambling",
-      "Added analog-style smooth scrolling animation when skipping stations",
-      "Fine-tuned sweep scrolling speed to match a realistic dial sweep",
-      "Fixed manual tuning skip arrows to calculate skips dynamically off the slider's exact raw frequency instead of the snapping station",
-      "Bugfix: Reset isSeeking internal state when releasing the tuning knob to re-enable arrow skipping"
+      "Removed the rigid auto-skip timeout and continuous frequency scrambling, empowering users with complete, unhindered manual tuning control",
+      "Added an analog-style, buttery smooth scrolling animation when jumping between stations for a highly tactile feel",
+      "Fine-tuned the sweep scrolling speed to perfectly mirror the physics and resistance of a real-world tuning dial",
+      "Overhauled manual tuning arrows to calculate skips dynamically off the slider's exact raw frequency instead of relying on snapping anchor points",
+      "Bugfix: Implemented a strict pointer-up state reset on the tuning knob, permanently eliminating the stuck 'seeking' bug that disabled arrow buttons",
+      "Introduced a highly polished, glassmorphic Info & Changelog modal tightly integrated into the dark UI aesthetic"
     ]
   }
 ];
@@ -1087,6 +1092,9 @@ function App() {
               </div>
 
               <div className="changelog-tab-content">
+                <div className="changelog-date">
+                  Released: {CHANGELOG_DATA.find(t => t.id === activeTab).date}
+                </div>
                 <ul>
                   {CHANGELOG_DATA.find(t => t.id === activeTab).items.map((item, idx) => (
                     <li key={idx}>{item}</li>
