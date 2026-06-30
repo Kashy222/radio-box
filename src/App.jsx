@@ -170,6 +170,7 @@ function App() {
   const skipNextRef = useRef(null);
   const skipPrevRef = useRef(null);
   const tuningDirectionRef = useRef(1);
+  const sweepIntervalRef = useRef(null);
   
   const [isMono, setIsMono] = useState(false);
   const [isPowerOn, setIsPowerOn] = useState(false); // Power state defaults to off
@@ -597,12 +598,12 @@ function App() {
 
   // Update current station state when closest station shifts
   useEffect(() => {
-    if (closestStation) {
+    if (closestStation && !isSeeking) {
       if (!currentStation || closestStation.stationuuid !== currentStation.stationuuid) {
         setCurrentStation(closestStation);
       }
     }
-  }, [closestStation, currentStation]);
+  }, [closestStation, currentStation, isSeeking]);
 
   // Play / Pause toggle
   const togglePlay = () => {
@@ -703,30 +704,59 @@ function App() {
     }
   };
 
+  const animateFrequencySweep = (startFreq, endFreq, direction, nextStation) => {
+    if (sweepIntervalRef.current) clearInterval(sweepIntervalRef.current);
+    if (audioRef.current) audioRef.current.pause();
+
+    let currentFreq = startFreq;
+    let totalDist = endFreq - startFreq;
+    if (direction === 1 && totalDist <= 0) totalDist += (MAX_FREQ - MIN_FREQ);
+    if (direction === -1 && totalDist >= 0) totalDist -= (MAX_FREQ - MIN_FREQ);
+    
+    let traveled = 0;
+    const totalNeeded = Math.abs(totalDist);
+    const step = 0.3; 
+
+    sweepIntervalRef.current = setInterval(() => {
+      traveled += step;
+      if (traveled >= totalNeeded) {
+        clearInterval(sweepIntervalRef.current);
+        sweepIntervalRef.current = null;
+        setFrequency(endFreq);
+        setCurrentStation(nextStation);
+        setIsSeeking(false);
+      } else {
+        let nextF = currentFreq + (direction * step);
+        if (nextF > MAX_FREQ) nextF = MIN_FREQ + (nextF - MAX_FREQ);
+        if (nextF < MIN_FREQ) nextF = MAX_FREQ - (MIN_FREQ - nextF);
+        currentFreq = nextF;
+        setFrequency(nextF);
+      }
+    }, 25);
+  };
+
   const handlePrevStation = () => {
-    if (!isPowerOn || stationFrequencies.length === 0) return;
+    if (!isPowerOn || stationFrequencies.length === 0 || isSeeking) return;
     setTuningDirection(-1);
     setIsSeeking(true);
     const currentIndex = stationFrequencies.findIndex(s => s.stationuuid === currentStation?.stationuuid);
     let prevIndex = currentIndex - 1;
     if (prevIndex < 0) prevIndex = stationFrequencies.length - 1;
     const prevStation = stationFrequencies[prevIndex];
-    setFrequency(prevStation.freq);
-    setCurrentStation(prevStation);
     initAudioContext();
+    animateFrequencySweep(frequency, prevStation.freq, -1, prevStation);
   };
 
   const handleNextStation = () => {
-    if (!isPowerOn || stationFrequencies.length === 0) return;
+    if (!isPowerOn || stationFrequencies.length === 0 || isSeeking) return;
     setTuningDirection(1);
     setIsSeeking(true);
     const currentIndex = stationFrequencies.findIndex(s => s.stationuuid === currentStation?.stationuuid);
     let nextIndex = currentIndex + 1;
     if (nextIndex >= stationFrequencies.length) nextIndex = 0;
     const nextStation = stationFrequencies[nextIndex];
-    setFrequency(nextStation.freq);
-    setCurrentStation(nextStation);
     initAudioContext();
+    animateFrequencySweep(frequency, nextStation.freq, 1, nextStation);
   };
 
 
